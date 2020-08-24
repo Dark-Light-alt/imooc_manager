@@ -88,6 +88,11 @@ export default {
               id: '1_4',
               path: 'Function',
               name: '资源管理'
+            },
+            {
+              id: '1_5',
+              path: 'Department',
+              name: '部门管理'
             }
           ]
         }
