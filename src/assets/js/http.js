@@ -11,7 +11,7 @@ nprogress.configure({
   showSpinner: false
 })
 
-axios.defaults.baseURL = 'http://localhost:8080/'
+axios.defaults.baseURL = 'http://localhost:8081/'
 
 axios.defaults.withCredentials = true
 
@@ -30,6 +30,7 @@ axios.interceptors.request.use(
 axios.interceptors.response.use(
   response => {
     nprogress.done()
+    console.log(response)
     return response
   },
   error => {
