@@ -58,12 +58,6 @@ export default {
       consumer: {},
       menus: [
         {
-          id: '2',
-          path: 'Classes',
-          name: '班级管理',
-          icon: 'el-icon-menu'
-        },
-        {
           id: '1',
           path: '',
           name: '权限管理',
@@ -71,8 +65,8 @@ export default {
           children: [
             {
               id: '1_1',
-              path: 'Consumer',
-              name: '用户管理'
+              path: 'EmployeeInfo',
+              name: '员工管理'
             },
             {
               id: '1_2',
