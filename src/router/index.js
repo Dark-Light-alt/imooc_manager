@@ -18,6 +18,11 @@ const routes = [
         path: '/employeeInfo',
         name: 'EmployeeInfo',
         component: () => import('../components/employeeInfo/EmployeeInfo')
+      },
+      {
+        path: '/accountNumber',
+        name: 'AccountNumber',
+        component: () => import('../components/accountNumber/AccountNumber')
       }
     ]
   }

@@ -73,8 +73,8 @@
               },
               {
                 id: '1_2',
-                path: 'Role',
-                name: '角色管理'
+                path: 'AccountNumber',
+                name: '账号管理'
               },
               {
                 id: '1_3',
