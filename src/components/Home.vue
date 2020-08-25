@@ -78,13 +78,13 @@
               },
               {
                 id: '1_3',
-                path: 'Position',
-                name: '职位管理'
+                path: 'Department',
+                name: '部门管理'
               },
               {
                 id: '1_4',
-                path: 'Function',
-                name: '资源管理'
+                path: 'Position',
+                name: '职位管理'
               }
             ]
           }

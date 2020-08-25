@@ -22,6 +22,7 @@
         <el-table-column label="操作">
           <template slot-scope="scope">
             <el-button size="mini" type="primary" @click="showUpdateDialog(scope.row.positionId)">修改职位</el-button>
+            <el-button size="mini" type="danger" @click="remove(scope.row.positionId)">删除职位</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -122,6 +123,25 @@
         }
         this.$message.success(res.meta.msg)
         this.updateDialogVisible = false
+        this.pagingFindAll()
+      },
+      remove: async function (positionId) {
+        const result = await this.$confirm('是否删除此职位, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).catch(err => err)
+
+        if (result !== 'confirm') {
+          return
+        }
+
+        const { data: res } = await this.$http.delete(`PositionController/remove/${positionId}`)
+        if (!res.meta.access) {
+          return this.$message.error(res.meta.msg)
+        }
+
+        this.$message.success(res.meta.msg)
         this.pagingFindAll()
       },
       sizeChange: async function (newSize) {

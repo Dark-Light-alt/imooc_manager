@@ -110,10 +110,14 @@
           </el-radio-group>
         </el-form-item>
         <el-form-item label="部门" prop="departmentId">
-          <el-input v-model="appendEmployeeInfo.departmentId"></el-input>
+          <el-select v-model="appendEmployeeInfo.departmentId" placeholder="请选择">
+            <el-option v-for="item in departmentList" :key="item.departmentId" :label="item.departmentName"
+                       :value="item.departmentId">
+            </el-option>
+          </el-select>
         </el-form-item>
         <el-form-item label="职位" prop="positionId">
-          <el-select v-model="updateEmployeeInfo.positionId" placeholder="请选择">
+          <el-select v-model="appendEmployeeInfo.positionId" placeholder="请选择">
             <el-option v-for="item in positionList" :key="item.positionId" :label="item.positionName"
                        :value="item.positionId">
             </el-option>
@@ -150,7 +154,11 @@
           </el-radio-group>
         </el-form-item>
         <el-form-item label="部门" prop="departmentId">
-          <el-input v-model="updateEmployeeInfo.departmentId"></el-input>
+          <el-select v-model="updateEmployeeInfo.departmentId" placeholder="请选择">
+            <el-option v-for="item in departmentList" :key="item.departmentId" :label="item.departmentName"
+                       :value="item.departmentId">
+            </el-option>
+          </el-select>
         </el-form-item>
         <el-form-item label="职位" prop="positionId">
           <el-select v-model="updateEmployeeInfo.positionId" placeholder="请选择">
@@ -234,6 +242,7 @@
           departmentId: null,
           positionId: null
         },
+        departmentList: [],
         positionList: [],
         updateDialogVisible: false,
         updateEmployeeInfo: {
@@ -269,6 +278,14 @@
         this.pages = res.pages
       },
       showAppendDialog: async function () {
+        const { data: department } = await this.$http.get('DepartmentController/findAll')
+
+        if (!department.meta.access) {
+          return this.$message.error(department.meta.msg)
+        }
+
+        this.departmentList = department.data.departmentList
+
         const { data: position } = await this.$http.get('PositionController/findAll')
 
         if (!position.meta.access) {
