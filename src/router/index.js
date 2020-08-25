@@ -12,7 +12,19 @@ const routes = [
   {
     path: '/home',
     name: 'Home',
-    component: () => import('../components/Home')
+    component: () => import('../components/Home'),
+    children: [
+      {
+        path: '/employeeInfo',
+        name: 'EmployeeInfo',
+        component: () => import('../components/employeeInfo/EmployeeInfo')
+      },
+      {
+        path: '/department',
+        name: 'Department',
+        component: () => import('../components/department/Department')
+      }
+    ]
   }
 ]
 

@@ -136,14 +136,15 @@
       }
     },
     methods: {
+
       findAll: async function () {
         const { data: res } = await this.$http.post('EmployeeInfoController/findAll', this.pages)
         if (!res.meta.access) {
           return this.$message.error(res.meta.msg)
         }
-
         this.employeeInfoList = res.data.employeeInfoList
       },
+
       append: async function () {
         const { data: res } = await this.$http.put('EmployeeInfoController/append', this.appendEmployeeInfo)
         if (!res.meta.access) {
