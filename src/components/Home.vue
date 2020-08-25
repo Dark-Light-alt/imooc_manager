@@ -78,8 +78,8 @@
               },
               {
                 id: '1_3',
-                path: 'Module',
-                name: '模块管理'
+                path: 'Position',
+                name: '职位管理'
               },
               {
                 id: '1_4',
