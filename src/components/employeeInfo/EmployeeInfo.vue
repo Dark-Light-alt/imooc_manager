@@ -7,6 +7,16 @@
     </el-breadcrumb>
     <el-card>
       <el-row :gutter="20">
+        <el-col :span="6">
+          <el-input placeholder="姓名" v-model="pages.searchs.name" clearable @clear="findAll">
+            <el-button slot="append" icon="el-icon-search" @click="findAll"></el-button>
+          </el-input>
+        </el-col>
+        <el-col :span="6">
+          <el-input placeholder="手机号" v-model="pages.searchs.phone" clearable @clear="findAll">
+            <el-button slot="append" icon="el-icon-search" @click="findAll"></el-button>
+          </el-input>
+        </el-col>
         <el-col :span="12">
           <el-button type="primary" @click="appendDialogVisible = true">添加员工</el-button>
         </el-col>
@@ -54,15 +64,21 @@
         </el-table-column>
         <el-table-column label="操作" width="300">
           <template slot-scope="scope">
+            <el-button size="mini" type="warning" v-if="scope.row.isleave == 0"
+                       @click="showUpdateDialog(scope.row.employeeId)">修改
+            </el-button>
             <el-button size="mini" type="danger" v-if="scope.row.isleave == 0"
                        @click="resignation(scope.row.employeeId)">办理离职
+            </el-button>
+            <el-button size="mini" type="success" v-if="scope.row.isleave == 0 && scope.row.accountNumberId == null"
+                       @click="allocationAccountNumberDialogVisible = true,employeeId = scope.row.employeeId">分配账号
             </el-button>
           </template>
         </el-table-column>
       </el-table>
       <el-pagination @size-change="sizeChange" @current-change="currentChange" @current-page="currentPage"
                      :current-page="pages.currentPage"
-                     :page-sizes="[1,3,5,10]" :page-size="pages.pageSize"
+                     :page-sizes="[1,3,5,7,10]" :page-size="pages.pageSize"
                      :total="pages.total" layout="total,sizes,prev,pager,next,jumper">
       </el-pagination>
     </el-card>
@@ -102,6 +118,64 @@
           <el-button type="primary" @click="append">确定</el-button>
       </span>
     </el-dialog>
+
+    <el-dialog title="添加用户信息" :visible.sync="updateDialogVisible" width="50%" @close="dialogClose('updateForm')">
+      <el-form label-position="right" label-width="100px" :model="updateEmployeeInfo" ref="updateForm">
+        <el-form-item label="姓名" prop="employeeName">
+          <el-input v-model="updateEmployeeInfo.employeeName"></el-input>
+        </el-form-item>
+        <el-form-item label="身份证号" prop="employeeIdcard">
+          <el-input v-model="updateEmployeeInfo.employeeIdcard"></el-input>
+        </el-form-item>
+        <el-form-item label="联系方式" prop="employeePhone">
+          <el-input v-model="updateEmployeeInfo.employeePhone"></el-input>
+        </el-form-item>
+        <el-form-item label="邮箱地址" prop="employeeEmail">
+          <el-input v-model="updateEmployeeInfo.employeeEmail"></el-input>
+        </el-form-item>
+        <el-form-item label="现居住地" prop="employeeAddress">
+          <el-input v-model="updateEmployeeInfo.employeeAddress"></el-input>
+        </el-form-item>
+        <el-form-item label="性别" prop="employeeSex">
+          <el-radio-group v-model="updateEmployeeInfo.employeeSex">
+            <el-radio :label="0">男</el-radio>
+            <el-radio :label="1">女</el-radio>
+          </el-radio-group>
+        </el-form-item>
+        <el-form-item label="部门" prop="departmentId">
+          <el-input v-model="updateEmployeeInfo.departmentId"></el-input>
+        </el-form-item>
+        <el-form-item label="职位" prop="positionId">
+          <el-input v-model="updateEmployeeInfo.positionId"></el-input>
+        </el-form-item>
+      </el-form>
+      <span slot="footer" class="dialog-footer">
+          <el-button @click="updateDialogVisible = false">取消</el-button>
+          <el-button type="primary" @click="update">确定</el-button>
+      </span>
+    </el-dialog>
+
+    <el-dialog title="分配账号" :visible.sync="allocationAccountNumberDialogVisible" width="50%"
+               @close="dialogClose('allocationAccountNumberForm')">
+      <el-form label-position="right" label-width="100px" :model="accountNumberInfo" ref="allocationAccountNumberForm">
+        <el-form-item label="用户名" prop="username">
+          <el-input v-model="accountNumberInfo.username"></el-input>
+        </el-form-item>
+        <el-form-item label="密码" prop="password">
+          <el-input v-model="accountNumberInfo.password"></el-input>
+        </el-form-item>
+        <el-form-item label="是否锁定" prop="islocked">
+          <el-radio-group v-model="accountNumberInfo.islocked">
+            <el-radio :label="0">正常</el-radio>
+            <el-radio :label="1">锁定</el-radio>
+          </el-radio-group>
+        </el-form-item>
+      </el-form>
+      <span slot="footer" class="dialog-footer">
+          <el-button @click="allocationAccountNumberDialogVisible = false">取消</el-button>
+          <el-button type="primary" @click="allocationAccountNumber">确定</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
@@ -117,7 +191,7 @@
           lastPage: 0,
           searchs: {
             name: '',
-            phone: ''
+            username: ''
           },
           flag: true
         },
@@ -132,6 +206,25 @@
           employeeSex: 0,
           departmentId: null,
           positionId: null
+        },
+        updateDialogVisible: false,
+        updateEmployeeInfo: {
+          employeeId: null,
+          employeeName: null,
+          employeeIdcard: null,
+          employeePhone: null,
+          employeeEmail: null,
+          employeeAddress: null,
+          employeeSex: null,
+          departmentId: null,
+          positionId: null
+        },
+        allocationAccountNumberDialogVisible: false,
+        employeeId: null,
+        accountNumberInfo: {
+          username: null,
+          password: null,
+          islocked: 0
         }
       }
     },
@@ -143,6 +236,7 @@
           return this.$message.error(res.meta.msg)
         }
         this.employeeInfoList = res.data.employeeInfoList
+        this.pages = res.pages
       },
 
       append: async function () {
@@ -173,16 +267,46 @@
         this.$message.success(res.meta.msg)
         this.findAll()
       },
+      showUpdateDialog: async function (employeeId) {
+        const { data: res } = await this.$http.get(`EmployeeInfoController/findById/${employeeId}`)
+        if (!res.meta.access) {
+          return this.$message.error(res.meta.msg)
+        }
+        this.updateEmployeeInfo = Object.assign(this.updateEmployeeInfo, res.data.employeeInfo)
+        this.updateDialogVisible = true
+      },
+      update: async function () {
+        const { data: res } = await this.$http.put('EmployeeInfoController/update', this.updateEmployeeInfo)
+        if (!res.meta.access) {
+          return this.$message.error(res.meta.msg)
+        }
+        this.$message.success(res.meta.msg)
+        this.updateDialogVisible = false
+        this.findAll()
+      },
+      allocationAccountNumber: async function () {
+        console.log(this.employeeId)
+        const { data: res } = await this.$http.put('EmployeeInfoController/allocationAccountNumber', {
+          employeeId: this.employeeId,
+          accountNumber: this.accountNumberInfo
+        })
+        if (!res.meta.access) {
+          return this.$message.error(res.meta.msg)
+        }
+        this.$message.success(res.meta.msg)
+        this.allocationAccountNumberDialogVisible = false
+        this.findAll()
+      },
       sizeChange: async function (newSize) {
-        this.page.pageSize = newSize
+        this.pages.pageSize = newSize
         this.findAll()
       },
       currentChange: async function (newPage) {
-        this.page.currentPage = newPage
+        this.pages.currentPage = newPage
         this.findAll()
       },
       currentPage: async function (newPage) {
-        this.page.currentPage = newPage
+        this.pages.currentPage = newPage
         this.findAll()
       },
       dialogClose: function (formRef) {
