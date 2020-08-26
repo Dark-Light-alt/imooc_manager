@@ -64,7 +64,7 @@
         </el-table-column>
         <el-table-column label="操作" width="300">
           <template slot-scope="scope">
-            <el-button size="mini" type="warning" v-if="scope.row.isleave == 0"
+            <el-button size="mini" icon="el-icon-edit" type="primary" v-if="scope.row.isleave == 0"
                        @click="showUpdateDialog(scope.row.employeeId)">修改
             </el-button>
             <el-button size="mini" type="danger" v-if="scope.row.isleave == 0"
@@ -283,7 +283,6 @@
         if (!department.meta.access) {
           return this.$message.error(department.meta.msg)
         }
-
         this.departmentList = department.data.departmentList
 
         const { data: position } = await this.$http.get('PositionController/findAll')
@@ -291,8 +290,8 @@
         if (!position.meta.access) {
           return this.$message.error(position.meta.msg)
         }
-
         this.positionList = position.data.positionList
+
         this.appendDialogVisible = true
       },
       append: async function () {
@@ -330,12 +329,18 @@
         }
         this.updateEmployeeInfo = Object.assign(this.updateEmployeeInfo, res.data.employeeInfo)
 
+        const { data: department } = await this.$http.get('DepartmentController/findAll')
+
+        if (!department.meta.access) {
+          return this.$message.error(department.meta.msg)
+        }
+        this.departmentList = department.data.departmentList
+
         const { data: position } = await this.$http.get('PositionController/findAll')
 
         if (!position.meta.access) {
           return this.$message.error(position.meta.msg)
         }
-
         this.positionList = position.data.positionList
 
         this.updateDialogVisible = true

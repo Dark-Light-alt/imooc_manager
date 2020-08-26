@@ -34,6 +34,11 @@ const routes = [
         path: '/department',
         name: 'Department',
         component: () => import('../components/department/Department')
+      },
+      {
+        path: '/rights',
+        name: 'Rights',
+        component: () => import('../components/rights/Rights')
       }
     ]
   }
