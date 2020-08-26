@@ -46,6 +46,8 @@
         </el-main>
       </el-container>
     </el-container>
+
+
   </div>
 </template>
 
@@ -84,8 +86,21 @@
               {
                 id: '1_4',
                 path: 'Position',
-                name: '职位管理'
+                name: '职位管理',
               }
+            ],
+          },
+          {
+            id: '2',
+            path: '',
+            name: '讲师中心',
+            icon: 'el-icon-menu',
+            children: [
+              {
+                id: '1_1',
+                path: 'Customer',
+                name: '讲师管理'
+              },
             ]
           }
         ]
@@ -117,7 +132,8 @@
 
         this.$message.success(res.meta.msg)
         this.$router.push({ name: 'Login' })
-      }
+      },
+
     }
   }
 </script>
