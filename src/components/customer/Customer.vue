@@ -53,31 +53,6 @@
       </el-pagination>
     </el-card>
 
-    <!--<el-dialog title="添加用户" :visible.sync="appendDialogVisible" width="50%"
-               @close="dialogClose('appendDepartmentForm')">
-      <el-form label-position="right" label-width="100px" :model="appendDepartmentInfo" ref="appendDepartmentForm">
-        <el-form-item label="部门名称" prop="departmentName">
-          <el-input v-model="appendDepartmentInfo.departmentName"></el-input>
-        </el-form-item>
-      </el-form>
-      <span slot="footer" class="dialog-footer">
-          <el-button @click="appendDialogVisible = false">取消</el-button>
-          <el-button type="primary" @click="appendDepartment">确定</el-button>
-      </span>
-    </el-dialog>
-
-    <el-dialog title="修改部门" :visible.sync="updateDialogVisible" width="50%"
-               @close="dialogClose('updateDepartmentForm')">
-      <el-form label-position="right" label-width="100px" :model="updateDepartmentInfo" ref="updateDepartmentForm">
-        <el-form-item label="部门名称" prop="departmentName">
-          <el-input v-model="updateDepartmentInfo.departmentName"></el-input>
-        </el-form-item>
-      </el-form>
-      <span slot="footer" class="dialog-footer">
-          <el-button @click="updateDialogVisible = false">取消</el-button>
-          <el-button type="primary" @click="updateDepartment">确定</el-button>
-      </span>
-    </el-dialog>-->
   </div>
 </template>
 

@@ -21,8 +21,13 @@
         <el-table-column prop="positionName" label="职位名称"></el-table-column>
         <el-table-column label="操作">
           <template slot-scope="scope">
-            <el-button size="mini" type="primary" @click="showUpdateDialog(scope.row.positionId)">修改职位</el-button>
-            <el-button size="mini" type="danger" @click="remove(scope.row.positionId)">删除职位</el-button>
+            <el-button size="mini" icon="el-icon-edit" type="primary" @click="showUpdateDialog(scope.row.positionId)">
+              修改
+            </el-button>
+            <el-button size="mini" icon="el-icon-delete" type="danger" @click="remove(scope.row.positionId)">删除
+            </el-button>
+            <el-button size="mini" type="success" @click="showAllocationRightsDialog(scope.row.positionId)">分配权限
+            </el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -58,6 +63,16 @@
           <el-button type="primary" @click="updatePosition">确定</el-button>
       </span>
     </el-dialog>
+
+    <el-dialog title="分配权限" :visible.sync="allocationRightsDialogVisible" width="50%">
+      <el-tree :data="rightsList" :props="treeProps" show-checkbox node-key="rightsId" default-expand-all
+               :default-checked-keys="checkedKey" ref="treeRef" @close="allocationRightsDialogClose"></el-tree>
+      <span slot="footer" class="dialog-footer">
+          <el-button @click="allocationRightsDialogVisible = false">取消</el-button>
+          <el-button type="primary" @click="allocationRights">确定</el-button>
+      </span>
+    </el-dialog>
+
   </div>
 </template>
 
@@ -85,7 +100,15 @@
         updatePositionInfo: {
           positionId: null,
           positionName: null
-        }
+        },
+        allocationRightsDialogVisible: false,
+        treeProps: {
+          children: 'children',
+          label: 'rightsName'
+        },
+        rightsList: [],
+        checkedKey: [],
+        positionId: null
       }
     },
     methods: {
@@ -143,6 +166,49 @@
 
         this.$message.success(res.meta.msg)
         this.pagingFindAll()
+      },
+      showAllocationRightsDialog: async function (positionId) {
+
+        this.positionId = positionId
+
+        const { data: res } = await this.$http.get('RightsController/treeFindAll')
+
+        if (!res.meta.access) {
+          return this.$message.error(res.meta.msg)
+        }
+        this.rightsList = res.data.rightsList
+
+        const { data: r } = await this.$http.get(`RightsController/findHaveThreeRights/${positionId}`)
+
+        if (!r.meta.access) {
+          return this.$message.error(r.meta.msg)
+        }
+
+        this.checkedKey = r.data.haveThreeRights
+        this.allocationRightsDialogVisible = true
+      },
+      allocationRightsDialogClose: function () {
+        this.checkedKey = []
+      },
+      allocationRights: async function () {
+        const keys = [
+          ...this.$refs.treeRef.getCheckedKeys(),
+          ...this.$refs.treeRef.getHalfCheckedKeys()
+        ]
+
+        const { data: res } = await this.$http.put('RightsController/allocationRights', {
+          positionId: this.positionId,
+          keys: keys
+        })
+
+        if (!res.meta.access) {
+          return this.$message.error(res.meta.msg)
+        }
+
+        this.$message.success(res.meta.msg)
+        this.pagingFindAll()
+        this.allocationRightsDialogVisible = false
+        this.allocationRightsDialogClose()
       },
       sizeChange: async function (newSize) {
         this.pages.pageSize = newSize

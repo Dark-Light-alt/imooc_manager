@@ -16,6 +16,7 @@
       <el-table :data="accountNumberList">
         <el-table-column type="index" label="#"></el-table-column>
         <el-table-column prop="username" label="用户名"></el-table-column>
+        <el-table-column prop="employeeInfo.employeeName" label="持有者"></el-table-column>
         <el-table-column prop="createTime" label="创建时间"></el-table-column>
         <el-table-column prop="endLoginTime" label="最后登录">
           <template slot-scope="scope">

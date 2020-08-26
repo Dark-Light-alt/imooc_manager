@@ -34,8 +34,8 @@
                   <i class="el-icon-arrow-down el-icon--right"></i>
                 </span>
               <el-dropdown-menu slot="dropdown">
-                <el-dropdown-item command="PersonalCenter">个人中心</el-dropdown-item>
-                <el-dropdown-item command="UpdatePwd">修改密码</el-dropdown-item>
+                <el-dropdown-item @click.native="PersonalCenter">个人中心</el-dropdown-item>
+                <el-dropdown-item @click.native="UpdatePwd">修改密码</el-dropdown-item>
                 <el-dropdown-item @click.native="exit">退出</el-dropdown-item>
               </el-dropdown-menu>
             </el-dropdown>
@@ -47,10 +47,8 @@
       </el-container>
     </el-container>
 
-
   </div>
 </template>
-
 <script>
   export default {
     name: 'Home.vue',
@@ -86,22 +84,22 @@
               {
                 id: '1_4',
                 path: 'Position',
-                name: '职位管理',
+                name: '职位管理'
               }
-            ],
-          },
-          {
+            ]
+          }
+          ,{
             id: '2',
             path: '',
             name: '讲师中心',
             icon: 'el-icon-menu',
             children: [
               {
-                id: '1_1',
+                id: '2_1',
                 path: 'Customer',
                 name: '讲师管理'
               },
-            ]
+              ]
           }
         ]
       }
@@ -117,12 +115,15 @@
         }
         this.collapses = !this.collapses
       },
+
       handleCommand: function (command) {
         this.$router.push({ name: command })
       },
+
       select: function (index) {
         this.active = index
       },
+
       exit: async function () {
         const { data: res } = await this.$http.post('/logout')
 
@@ -133,6 +134,7 @@
         this.$message.success(res.meta.msg)
         this.$router.push({ name: 'Login' })
       },
+
 
     }
   }

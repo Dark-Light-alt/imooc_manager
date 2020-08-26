@@ -63,7 +63,7 @@
             if (!res.meta.access) {
               return this.$message.error(res.meta.msg)
             }
-
+            sessionStorage.setItem('employeeInfo', JSON.stringify(res.data.employeeInfo))
             this.$message.success(res.meta.msg)
             this.$router.push({ name: 'Home' })
           }

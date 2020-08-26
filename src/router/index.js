@@ -39,7 +39,7 @@ const routes = [
         path: '/customer',
         name: 'Customer',
         component: () => import('../components/customer/Customer')
-      }
+      },
     ]
   }
 ]
