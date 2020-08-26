@@ -60,39 +60,39 @@
         collapse_icon: 'el-icon-s-fold',
         consumer: {},
         menus: []
-      // {
-      //   id: '1',
-      //     path: '',
-      //   name: '权限管理',
-      //   icon: 'el-icon-menu',
-      //   children: [
-      //   {
-      //     id: '1_1',
-      //     path: 'EmployeeInfo',
-      //     name: '员工管理'
-      //   },
-      //   {
-      //     id: '1_2',
-      //     path: 'AccountNumber',
-      //     name: '账号管理'
-      //   },
-      //   {
-      //     id: '1_3',
-      //     path: 'Department',
-      //     name: '部门管理'
-      //   },
-      //   {
-      //     id: '1_4',
-      //     path: 'Position',
-      //     name: '职位管理'
-      //   },
-      //   {
-      //     id: '1_5',
-      //     path: 'Rights',
-      //     name: '权限列表'
-      //   }
-      // ]
-      // }
+        // {
+        //   id: '1',
+        //     path: '',
+        //   name: '权限管理',
+        //   icon: 'el-icon-menu',
+        //   children: [
+        //   {
+        //     id: '1_1',
+        //     path: 'EmployeeInfo',
+        //     name: '员工管理'
+        //   },
+        //   {
+        //     id: '1_2',
+        //     path: 'AccountNumber',
+        //     name: '账号管理'
+        //   },
+        //   {
+        //     id: '1_3',
+        //     path: 'Department',
+        //     name: '部门管理'
+        //   },
+        //   {
+        //     id: '1_4',
+        //     path: 'Position',
+        //     name: '职位管理'
+        //   },
+        //   {
+        //     id: '1_5',
+        //     path: 'Rights',
+        //     name: '权限列表'
+        //   }
+        // ]
+        // }
       }
     },
     methods: {
@@ -121,10 +121,20 @@
 
         this.$message.success(res.meta.msg)
         this.$router.push({ name: 'Login' })
+      },
+      findRightsByPositionId: async function () {
+        const positionId = JSON.parse(sessionStorage.getItem('employeeInfo')).positionId
+        const { data: res } = await this.$http.get(`RightsController/findRightsByPositionId/${positionId}`)
+
+        if (!res.meta.access) {
+          return this.$message.error(res.meta.msg)
+        }
+
+        this.menus = res.data.rightsList
       }
     },
     created: function () {
-      this.menus = JSON.parse(sessionStorage.getItem("rightsList"))
+      this.findRightsByPositionId()
     }
   }
 </script>

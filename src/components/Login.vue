@@ -64,7 +64,6 @@
               return this.$message.error(res.meta.msg)
             }
             sessionStorage.setItem('employeeInfo', JSON.stringify(res.data.employeeInfo))
-            sessionStorage.setItem('rightsList', JSON.stringify(res.data.rightsList))
             this.$message.success(res.meta.msg)
             this.$router.push({ name: 'Home' })
           }
