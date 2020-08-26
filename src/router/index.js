@@ -23,6 +23,16 @@ const routes = [
         path: '/accountNumber',
         name: 'AccountNumber',
         component: () => import('../components/accountNumber/AccountNumber')
+      },
+      {
+        path: '/monograph',
+        name: 'Monograph',
+        component: () => import('../components/monograph/Monograph')
+      },
+      {
+        path: '/buildMonograph',
+        name: 'BuildMonograph',
+        component: () => import('../components/monograph/BuildMonograph')
       }
       ,
       {
