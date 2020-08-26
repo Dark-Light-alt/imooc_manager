@@ -24,6 +24,22 @@ const routes = [
         name: 'AccountNumber',
         component: () => import('../components/accountNumber/AccountNumber')
       }
+      ,
+      {
+        path: '/position',
+        name: 'Position',
+        component: () => import('../components/position/Position')
+      },
+      {
+        path: '/department',
+        name: 'Department',
+        component: () => import('../components/department/Department')
+      },
+      {
+        path: '/rights',
+        name: 'Rights',
+        component: () => import('../components/rights/Rights')
+      }
     ]
   }
 ]

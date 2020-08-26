@@ -18,7 +18,7 @@
           </el-input>
         </el-col>
         <el-col :span="12">
-          <el-button type="primary" @click="appendDialogVisible = true">添加员工</el-button>
+          <el-button type="primary" @click="showAppendDialog">添加员工</el-button>
         </el-col>
       </el-row>
       <el-table :data="employeeInfoList">
@@ -64,7 +64,7 @@
         </el-table-column>
         <el-table-column label="操作" width="300">
           <template slot-scope="scope">
-            <el-button size="mini" type="warning" v-if="scope.row.isleave == 0"
+            <el-button size="mini" icon="el-icon-edit" type="primary" v-if="scope.row.isleave == 0"
                        @click="showUpdateDialog(scope.row.employeeId)">修改
             </el-button>
             <el-button size="mini" type="danger" v-if="scope.row.isleave == 0"
@@ -72,6 +72,9 @@
             </el-button>
             <el-button size="mini" type="success" v-if="scope.row.isleave == 0 && scope.row.accountNumberId == null"
                        @click="allocationAccountNumberDialogVisible = true,employeeId = scope.row.employeeId">分配账号
+            </el-button>
+            <el-button size="mini" v-if="scope.row.accountNumberId != null"
+                       @click="findAccountNumber(scope.row.accountNumberId)">查询账号
             </el-button>
           </template>
         </el-table-column>
@@ -107,10 +110,18 @@
           </el-radio-group>
         </el-form-item>
         <el-form-item label="部门" prop="departmentId">
-          <el-input v-model="appendEmployeeInfo.departmentId"></el-input>
+          <el-select v-model="appendEmployeeInfo.departmentId" placeholder="请选择">
+            <el-option v-for="item in departmentList" :key="item.departmentId" :label="item.departmentName"
+                       :value="item.departmentId">
+            </el-option>
+          </el-select>
         </el-form-item>
         <el-form-item label="职位" prop="positionId">
-          <el-input v-model="appendEmployeeInfo.positionId"></el-input>
+          <el-select v-model="appendEmployeeInfo.positionId" placeholder="请选择">
+            <el-option v-for="item in positionList" :key="item.positionId" :label="item.positionName"
+                       :value="item.positionId">
+            </el-option>
+          </el-select>
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
@@ -119,7 +130,7 @@
       </span>
     </el-dialog>
 
-    <el-dialog title="添加用户信息" :visible.sync="updateDialogVisible" width="50%" @close="dialogClose('updateForm')">
+    <el-dialog title="修改用户信息" :visible.sync="updateDialogVisible" width="50%" @close="dialogClose('updateForm')">
       <el-form label-position="right" label-width="100px" :model="updateEmployeeInfo" ref="updateForm">
         <el-form-item label="姓名" prop="employeeName">
           <el-input v-model="updateEmployeeInfo.employeeName"></el-input>
@@ -143,10 +154,18 @@
           </el-radio-group>
         </el-form-item>
         <el-form-item label="部门" prop="departmentId">
-          <el-input v-model="updateEmployeeInfo.departmentId"></el-input>
+          <el-select v-model="updateEmployeeInfo.departmentId" placeholder="请选择">
+            <el-option v-for="item in departmentList" :key="item.departmentId" :label="item.departmentName"
+                       :value="item.departmentId">
+            </el-option>
+          </el-select>
         </el-form-item>
         <el-form-item label="职位" prop="positionId">
-          <el-input v-model="updateEmployeeInfo.positionId"></el-input>
+          <el-select v-model="updateEmployeeInfo.positionId" placeholder="请选择">
+            <el-option v-for="item in positionList" :key="item.positionId" :label="item.positionName"
+                       :value="item.positionId">
+            </el-option>
+          </el-select>
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
@@ -175,6 +194,22 @@
           <el-button @click="allocationAccountNumberDialogVisible = false">取消</el-button>
           <el-button type="primary" @click="allocationAccountNumber">确定</el-button>
       </span>
+    </el-dialog>
+
+    <el-dialog title="所属账号" :visible.sync="accountNumberDialogVisible" width="50%"
+               @close="dialogClose('findAccountNumberInfoForm')">
+      <el-form label-position="right" label-width="100px" :model="findAccountNumberInfo"
+               ref="findAccountNumberInfoForm">
+        <el-form-item label="用户名" prop="username">
+          <el-input v-model="findAccountNumberInfo.username"></el-input>
+        </el-form-item>
+        <el-form-item label="是否锁定" prop="islocked">
+          <el-radio-group v-model="findAccountNumberInfo.islocked">
+            <el-radio :label="0">正常</el-radio>
+            <el-radio :label="1">锁定</el-radio>
+          </el-radio-group>
+        </el-form-item>
+      </el-form>
     </el-dialog>
   </div>
 </template>
@@ -207,6 +242,8 @@
           departmentId: null,
           positionId: null
         },
+        departmentList: [],
+        positionList: [],
         updateDialogVisible: false,
         updateEmployeeInfo: {
           employeeId: null,
@@ -225,7 +262,9 @@
           username: null,
           password: null,
           islocked: 0
-        }
+        },
+        accountNumberDialogVisible: false,
+        findAccountNumberInfo: {}
       }
     },
     methods: {
@@ -237,6 +276,23 @@
 
         this.employeeInfoList = res.data.employeeInfoList
         this.pages = res.pages
+      },
+      showAppendDialog: async function () {
+        const { data: department } = await this.$http.get('DepartmentController/findAll')
+
+        if (!department.meta.access) {
+          return this.$message.error(department.meta.msg)
+        }
+        this.departmentList = department.data.departmentList
+
+        const { data: position } = await this.$http.get('PositionController/findAll')
+
+        if (!position.meta.access) {
+          return this.$message.error(position.meta.msg)
+        }
+        this.positionList = position.data.positionList
+
+        this.appendDialogVisible = true
       },
       append: async function () {
         const { data: res } = await this.$http.put('EmployeeInfoController/append', this.appendEmployeeInfo)
@@ -272,6 +328,21 @@
           return this.$message.error(res.meta.msg)
         }
         this.updateEmployeeInfo = Object.assign(this.updateEmployeeInfo, res.data.employeeInfo)
+
+        const { data: department } = await this.$http.get('DepartmentController/findAll')
+
+        if (!department.meta.access) {
+          return this.$message.error(department.meta.msg)
+        }
+        this.departmentList = department.data.departmentList
+
+        const { data: position } = await this.$http.get('PositionController/findAll')
+
+        if (!position.meta.access) {
+          return this.$message.error(position.meta.msg)
+        }
+        this.positionList = position.data.positionList
+
         this.updateDialogVisible = true
       },
       update: async function () {
@@ -284,7 +355,6 @@
         this.findAll()
       },
       allocationAccountNumber: async function () {
-        console.log(this.employeeId)
         const { data: res } = await this.$http.put('EmployeeInfoController/allocationAccountNumber', {
           employeeId: this.employeeId,
           accountNumber: this.accountNumberInfo
@@ -295,6 +365,14 @@
         this.$message.success(res.meta.msg)
         this.allocationAccountNumberDialogVisible = false
         this.findAll()
+      },
+      findAccountNumber: async function (accountNumberId) {
+        const { data: res } = await this.$http.get(`AccountNumberController/findById/${accountNumberId}`)
+        if (!res.meta.access) {
+          return this.$message.error(res.meta.msg)
+        }
+        this.findAccountNumberInfo = res.data.accountNumber
+        this.accountNumberDialogVisible = true
       },
       sizeChange: async function (newSize) {
         this.pages.pageSize = newSize

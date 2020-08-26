@@ -2,20 +2,20 @@
   <div class="home">
     <el-container>
       <el-aside :width="aside_width">
-        <el-menu router v-for="menu in menus" :key="menu.id" background-color="#304156" text-color="#BFCBD9"
+        <el-menu router v-for="menu in menus" :key="menu.rightsId" background-color="#304156" text-color="#BFCBD9"
                  :collapse="collapses" :default-active="active" @select="select">
-          <el-menu-item :index="menu.id" v-if="menu.children === undefined" :route="{name: menu.path}">
+          <el-menu-item :index="menu.rightsId" v-if="menu.children === undefined" :route="{name: menu.rightsPath}">
             <i :class="menu.icon"></i>
-            <span>{{menu.name}}</span>
+            <span>{{menu.rightsName}}</span>
           </el-menu-item>
-          <el-submenu :index="menu.id" v-if="menu.children !== undefined">
+          <el-submenu :index="menu.rightsId" v-if="menu.children !== undefined">
             <template slot="title">
               <i :class="menu.icon"></i>
-              <span>{{menu.name}}</span>
+              <span>{{menu.rightsName}}</span>
             </template>
-            <el-menu-item :index="children.id" v-for="children in menu.children" :key="children.id"
-                          :route="{name: children.path}">
-              <span>{{children.name}}</span>
+            <el-menu-item :index="children.rightsId" v-for="children in menu.children" :key="children.rightsId"
+                          :route="{name: children.rightsPath}">
+              <span>{{children.rightsName}}</span>
             </el-menu-item>
           </el-submenu>
         </el-menu>
@@ -59,36 +59,40 @@
         aside_width: '210px',
         collapse_icon: 'el-icon-s-fold',
         consumer: {},
-        menus: [
-          {
-            id: '1',
-            path: '',
-            name: '权限管理',
-            icon: 'el-icon-menu',
-            children: [
-              {
-                id: '1_1',
-                path: 'EmployeeInfo',
-                name: '员工管理'
-              },
-              {
-                id: '1_2',
-                path: 'AccountNumber',
-                name: '账号管理'
-              },
-              {
-                id: '1_3',
-                path: 'Module',
-                name: '模块管理'
-              },
-              {
-                id: '1_4',
-                path: 'Function',
-                name: '资源管理'
-              }
-            ]
-          }
-        ]
+        menus: []
+      // {
+      //   id: '1',
+      //     path: '',
+      //   name: '权限管理',
+      //   icon: 'el-icon-menu',
+      //   children: [
+      //   {
+      //     id: '1_1',
+      //     path: 'EmployeeInfo',
+      //     name: '员工管理'
+      //   },
+      //   {
+      //     id: '1_2',
+      //     path: 'AccountNumber',
+      //     name: '账号管理'
+      //   },
+      //   {
+      //     id: '1_3',
+      //     path: 'Department',
+      //     name: '部门管理'
+      //   },
+      //   {
+      //     id: '1_4',
+      //     path: 'Position',
+      //     name: '职位管理'
+      //   },
+      //   {
+      //     id: '1_5',
+      //     path: 'Rights',
+      //     name: '权限列表'
+      //   }
+      // ]
+      // }
       }
     },
     methods: {
@@ -118,6 +122,9 @@
         this.$message.success(res.meta.msg)
         this.$router.push({ name: 'Login' })
       }
+    },
+    created: function () {
+      this.menus = JSON.parse(sessionStorage.getItem("rightsList"))
     }
   }
 </script>
