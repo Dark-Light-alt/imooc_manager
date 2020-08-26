@@ -44,8 +44,9 @@
         <el-table-column prop="createTime" label="创建时间"></el-table-column>
         <el-table-column label="状态">
           <template slot-scope="scope">
-            <el-tag type="success" v-if="scope.row.offShelf == 0">未下架</el-tag>
-            <el-tag type="danger" v-else>已下架</el-tag>
+            <el-tag type="success" v-if="scope.row.offShelf == 0">未上架</el-tag>
+            <el-tag type="warning" v-else-if="scope.row.offShelf == 1">已上架</el-tag>
+            <el-tag type="danger" v-else-if="scope.row.offShelf == 2">已下架</el-tag>
           </template>
         </el-table-column>
         <el-table-column label="操作" width="300">

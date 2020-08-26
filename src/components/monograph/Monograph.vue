@@ -46,21 +46,28 @@
         <el-table-column prop="author" label="作者"></el-table-column>
         <el-table-column prop="price" label="价格"></el-table-column>
         <el-table-column prop="numberOfPurchasers" label="购买人数"></el-table-column>
+        <el-table-column label="状态">
+          <template slot-scope="scope">
+            <el-tag type="success" v-if="scope.row.offShelf == 0">未上架</el-tag>
+            <el-tag type="warning" v-else-if="scope.row.offShelf == 1">已上架</el-tag>
+            <el-tag type="danger" v-else-if="scope.row.offShelf == 2">已下架</el-tag>
+          </template>
+        </el-table-column>
         <el-table-column label="优惠价格">
           <template slot-scope="scope">
-            <el-tag type="danger" v-if="scope.row.discounts != null && scope.row.offShelf == 0">{{scope.row.price-scope.row.discounts}}</el-tag>
-            <el-tag type="danger" v-else-if="scope.row.discounts == null && scope.row.offShelf == 0 && scope.row.price != null">无优惠</el-tag>
+            <el-tag type="danger" v-if="scope.row.discounts != null && scope.row.offShelf == 1">{{scope.row.price-scope.row.discounts}}</el-tag>
+            <el-tag type="danger" v-else-if="scope.row.discounts == null && scope.row.offShelf == 1 && scope.row.price != null">无优惠</el-tag>
           </template>
         </el-table-column>
         <el-table-column label="操作" width="300">
           <template slot-scope="scope">
-            <el-button size="mini" type="warning" v-if="scope.row.offShelf == 0 && scope.row.price == null"
+            <el-button size="mini" type="warning" v-if="scope.row.offShelf == 1 && scope.row.price == null"
                        @click="showUpdateDialog(scope.row.monographId)">定价
             </el-button>
-            <el-button size="mini" type="warning" v-if="scope.row.offShelf == 0 && scope.row.price != null"
+            <el-button size="mini" type="warning" v-if="scope.row.offShelf == 1 && scope.row.price != null"
                        @click="showUpdateDialog(scope.row.monographId)">优惠
             </el-button>
-            <el-button size="mini" type="danger" v-if="scope.row.offShelf == 0"
+            <el-button size="mini" type="danger" v-if="scope.row.offShelf == 1"
                        @click="soldOut(scope.row.monographId)">下架
             </el-button>
           </template>
