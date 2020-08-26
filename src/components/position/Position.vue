@@ -72,6 +72,7 @@
           <el-button type="primary" @click="allocationRights">确定</el-button>
       </span>
     </el-dialog>
+
   </div>
 </template>
 

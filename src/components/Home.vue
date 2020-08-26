@@ -2,20 +2,20 @@
   <div class="home">
     <el-container>
       <el-aside :width="aside_width">
-        <el-menu router v-for="menu in menus" :key="menu.rightsId" background-color="#304156" text-color="#BFCBD9"
+        <el-menu router v-for="menu in menus" :key="menu.id" background-color="#304156" text-color="#BFCBD9"
                  :collapse="collapses" :default-active="active" @select="select">
-          <el-menu-item :index="menu.rightsId" v-if="menu.children === undefined" :route="{name: menu.rightsPath}">
+          <el-menu-item :index="menu.id" v-if="menu.children === undefined" :route="{name: menu.path}">
             <i :class="menu.icon"></i>
-            <span>{{menu.rightsName}}</span>
+            <span>{{menu.name}}</span>
           </el-menu-item>
-          <el-submenu :index="menu.rightsId" v-if="menu.children !== undefined">
+          <el-submenu :index="menu.id" v-if="menu.children !== undefined">
             <template slot="title">
               <i :class="menu.icon"></i>
-              <span>{{menu.rightsName}}</span>
+              <span>{{menu.name}}</span>
             </template>
-            <el-menu-item :index="children.rightsId" v-for="children in menu.children" :key="children.rightsId"
-                          :route="{name: children.rightsPath}">
-              <span>{{children.rightsName}}</span>
+            <el-menu-item :index="children.id" v-for="children in menu.children" :key="children.id"
+                          :route="{name: children.path}">
+              <span>{{children.name}}</span>
             </el-menu-item>
           </el-submenu>
         </el-menu>
@@ -34,8 +34,8 @@
                   <i class="el-icon-arrow-down el-icon--right"></i>
                 </span>
               <el-dropdown-menu slot="dropdown">
-                <el-dropdown-item command="PersonalCenter">个人中心</el-dropdown-item>
-                <el-dropdown-item command="UpdatePwd">修改密码</el-dropdown-item>
+                <el-dropdown-item @click.native="PersonalCenter">个人中心</el-dropdown-item>
+                <el-dropdown-item @click.native="UpdatePwd">修改密码</el-dropdown-item>
                 <el-dropdown-item @click.native="exit">退出</el-dropdown-item>
               </el-dropdown-menu>
             </el-dropdown>
@@ -46,9 +46,9 @@
         </el-main>
       </el-container>
     </el-container>
+
   </div>
 </template>
-
 <script>
   export default {
     name: 'Home.vue',
@@ -59,40 +59,49 @@
         aside_width: '210px',
         collapse_icon: 'el-icon-s-fold',
         consumer: {},
-        menus: []
-        // {
-        //   id: '1',
-        //     path: '',
-        //   name: '权限管理',
-        //   icon: 'el-icon-menu',
-        //   children: [
-        //   {
-        //     id: '1_1',
-        //     path: 'EmployeeInfo',
-        //     name: '员工管理'
-        //   },
-        //   {
-        //     id: '1_2',
-        //     path: 'AccountNumber',
-        //     name: '账号管理'
-        //   },
-        //   {
-        //     id: '1_3',
-        //     path: 'Department',
-        //     name: '部门管理'
-        //   },
-        //   {
-        //     id: '1_4',
-        //     path: 'Position',
-        //     name: '职位管理'
-        //   },
-        //   {
-        //     id: '1_5',
-        //     path: 'Rights',
-        //     name: '权限列表'
-        //   }
-        // ]
-        // }
+        menus: [
+          {
+            id: '1',
+            path: '',
+            name: '权限管理',
+            icon: 'el-icon-menu',
+            children: [
+              {
+                id: '1_1',
+                path: 'EmployeeInfo',
+                name: '员工管理'
+              },
+              {
+                id: '1_2',
+                path: 'AccountNumber',
+                name: '账号管理'
+              },
+              {
+                id: '1_3',
+                path: 'Department',
+                name: '部门管理'
+              },
+              {
+                id: '1_4',
+                path: 'Position',
+                name: '职位管理'
+              }
+            ]
+          }
+          ,{
+            id: '2',
+            path: '',
+            name: '讲师中心',
+            icon: 'el-icon-menu',
+            children: [
+              {
+                id: '2_1',
+                path: 'Customer',
+                name: '讲师管理'
+              },
+              ]
+          }
+        ]
       }
     },
     methods: {
@@ -106,12 +115,15 @@
         }
         this.collapses = !this.collapses
       },
+
       handleCommand: function (command) {
         this.$router.push({ name: command })
       },
+
       select: function (index) {
         this.active = index
       },
+
       exit: async function () {
         const { data: res } = await this.$http.post('/logout')
 
@@ -122,19 +134,8 @@
         this.$message.success(res.meta.msg)
         this.$router.push({ name: 'Login' })
       },
-      findRightsByPositionId: async function () {
-        const positionId = JSON.parse(sessionStorage.getItem('employeeInfo')).positionId
-        const { data: res } = await this.$http.get(`RightsController/findRightsByPositionId/${positionId}`)
 
-        if (!res.meta.access) {
-          return this.$message.error(res.meta.msg)
-        }
 
-        this.menus = res.data.rightsList
-      }
-    },
-    created: function () {
-      this.findRightsByPositionId()
     }
   }
 </script>

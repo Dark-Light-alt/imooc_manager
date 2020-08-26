@@ -49,6 +49,11 @@ const routes = [
         path: '/type',
         name: 'Type',
         component: () => import('../components/type/Type')
+      },
+      {
+        path: '/customer',
+        name: 'Customer',
+        component: () => import('../components/customer/Customer')
       }
     ]
   }
