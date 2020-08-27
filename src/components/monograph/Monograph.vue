@@ -8,12 +8,7 @@
     <el-card>
       <el-row :gutter="20">
         <el-col :span="6">
-          <el-input placeholder="专刊名" v-model="pages.searchs.monographName" clearable @clear="findAll">
-            <el-button slot="append" icon="el-icon-search" @click="findAll"></el-button>
-          </el-input>
-        </el-col>
-        <el-col :span="6">
-          <el-input placeholder="作者" v-model="pages.searchs.author" clearable @clear="findAll">
+          <el-input placeholder="关键字" v-model="pages.searchs.keyword" clearable @clear="findAll">
             <el-button slot="append" icon="el-icon-search" @click="findAll"></el-button>
           </el-input>
         </el-col>
@@ -116,8 +111,7 @@
           total: 0,
           lastPage: 0,
           searchs: {
-            monographName:'',
-            author:''
+          keyword:''
           },
           flag: true
         },

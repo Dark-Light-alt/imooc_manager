@@ -8,12 +8,7 @@
     <el-card>
       <el-row :gutter="20">
         <el-col :span="6">
-          <el-input placeholder="专刊标题" v-model="pages.searchs.monographName" clearable @clear="findAll">
-            <el-button slot="append" icon="el-icon-search" @click="findAll"></el-button>
-          </el-input>
-        </el-col>
-        <el-col :span="6">
-          <el-input placeholder="作者" v-model="pages.searchs.author" clearable @clear="findAll">
+          <el-input placeholder="关键词" v-model="pages.searchs.keyword" clearable @clear="findAll">
             <el-button slot="append" icon="el-icon-search" @click="findAll"></el-button>
           </el-input>
         </el-col>
@@ -51,8 +46,6 @@
         </el-table-column>
         <el-table-column label="操作" width="300">
           <template slot-scope="scope">
-            <el-button size="mini" type="warning" @click="showDialog(scope.row.monographId)">预览
-            </el-button>
             <el-button size="mini" type="primary" @click="appendDialog(scope.row.monographId)"
                        v-if="scope.row.offShelf == 0">添加章节
             </el-button>
@@ -91,15 +84,6 @@
           <el-button @click="appendDialogVisible = false">取消</el-button>
           <el-button type="primary" @click="append()">确定</el-button>
       </span>
-    </el-dialog>
-
-    <el-dialog title="专刊章节" :visible.sync="showDialogVisible" width="50%" :close-on-click-modal="false">
-      <el-table :data="chapterList">
-        <el-table-column type="index" label="#"></el-table-column>
-        <el-table-column prop="monograph.monographName" label="专栏题目"></el-table-column>
-        <el-table-column prop="chapterName" label="章节标题"></el-table-column>
-        <el-table-column prop="chapterAbout" label="章节详情"></el-table-column>
-      </el-table>
     </el-dialog>
 
     <el-dialog title="添加章节" :visible.sync="appendChapterDialogVisible" width="50%" @close="dialogClose('appendForm')">
@@ -155,8 +139,7 @@
           total: 0,
           lastPage: 0,
           searchs: {
-            monographName: '',
-            author: ''
+           keyword:''
           },
           flag: true
         },
@@ -169,8 +152,6 @@
           monographAbout: null,
           author: null
         },
-        showDialogVisible: false,
-        chapterList: [],
         appendChapterDialogVisible: false,
         appendChapterInfo: {
           chapterName: null,
@@ -206,15 +187,6 @@
         this.appendDialogVisible = false
         this.findAll()
         this.$message.success(res.meta.msg)
-      },
-      showDialog: async function (monographId) {
-        //根据id查询
-        const { data: res } = await this.$http.get(`ChapterController/findByMonograph/${monographId}`)
-        if (!res.meta.access) {
-          return this.$message.error(res.meta.msg)
-        }
-        this.chapterList = res.data.chapterList
-        this.showDialogVisible = true
       },
       appendDialog: async function (monographId) {
         this.appendChapterInfo.chapterResource = monographId
