@@ -35,22 +35,22 @@
         <el-table-column type="index" label="#"></el-table-column>
         <el-table-column prop="monographName" label="专刊标题" :show-overflow-tooltip="true"></el-table-column>
         <el-table-column prop="cover" label="封面"></el-table-column>
-        <el-table-column prop="author" label="作者"></el-table-column>
         <el-table-column prop="createTime" label="创建时间"></el-table-column>
         <el-table-column label="状态">
           <template slot-scope="scope">
-            <el-tag type="success" v-if="scope.row.offShelf == 0">未上架</el-tag>
-            <el-tag type="warning" v-else-if="scope.row.offShelf == 1">已上架</el-tag>
-            <el-tag type="danger" v-else-if="scope.row.offShelf == 2">已下架</el-tag>
+            <el-tag type="success" v-if="scope.row.offShelf == 0">未完成</el-tag>
+            <el-tag type="warning" v-else>已完成</el-tag>
           </template>
         </el-table-column>
         <el-table-column label="操作" width="300">
           <template slot-scope="scope">
-            <el-button size="mini" type="primary" @click="appendDialog(scope.row.monographId)"
+           <!-- <el-button size="mini" type="primary" @click="appendDialog(scope.row.monographId)"
                        v-if="scope.row.offShelf == 0">添加章节
+            </el-button>-->
+            <el-button size="mini" type="primary" @click="updateDialog(scope.row.monographId)"
+                       v-if="scope.row.offShelf == 0">修改
             </el-button>
-            <el-button size="mini" type="success" @click="updateDialog(scope.row.monographId)"
-                       v-if="scope.row.offShelf == 0">修改专栏
+            <el-button size="mini" type="danger" @click="deleteMonograph(scope.row.monographId)">删除
             </el-button>
           </template>
         </el-table-column>
@@ -76,9 +76,6 @@
         <el-form-item label="简介" prop="monographAbout">
           <el-input v-model="appendMonographInfo.monographAbout"></el-input>
         </el-form-item>
-        <el-form-item label="作者" prop="author">
-          <el-input v-model="appendMonographInfo.author"></el-input>
-        </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
           <el-button @click="appendDialogVisible = false">取消</el-button>
@@ -86,7 +83,7 @@
       </span>
     </el-dialog>
 
-    <el-dialog title="添加章节" :visible.sync="appendChapterDialogVisible" width="50%" @close="dialogClose('appendForm')">
+   <!-- <el-dialog title="添加章节" :visible.sync="appendChapterDialogVisible" width="50%" @close="dialogClose('appendForm')">
       <el-form label-position="right" label-width="100px" :model="appendChapterInfo" ref="appendForm">
         <input v-model="appendChapterInfo.chapterResource" type="hidden"/>
         <el-form-item label="章节标题" prop="chapterName">
@@ -101,6 +98,8 @@
           <el-button type="primary" @click="appendChapter()">确定</el-button>
       </span>
     </el-dialog>
+-->
+
 
     <el-dialog title="修改专刊信息" :visible.sync="updateDialogVisible" width="50%" @close="dialogClose('updateForm')">
       <el-form label-position="right" label-width="100px" :model="appendMonographInfo" ref="updateForm">
@@ -116,9 +115,6 @@
         <el-form-item label="简介" prop="monographAbout">
           <el-input v-model="updateMonographInfo.monographAbout"></el-input>
         </el-form-item>
-        <el-form-item label="作者" prop="author">
-          <el-input v-model="updateMonographInfo.author"></el-input>
-        </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
           <el-button @click="updateDialogVisible = false">取消</el-button>
@@ -130,7 +126,7 @@
 
 <script>
   export default {
-    name: 'BuildMonograph',
+    name: 'MyMonograph',
     data: function () {
       return {
         pages: {
@@ -152,26 +148,29 @@
           monographAbout: null,
           author: null
         },
-        appendChapterDialogVisible: false,
+      /*  appendChapterDialogVisible: false,
         appendChapterInfo: {
           chapterName: null,
           chapterAbout: null,
           chapterType: 1,
           chapterResource: null
-        },
+        },*/
         updateDialogVisible:false,
         updateMonographInfo:{
           monographName: null,
           cover: null,
           highlights: null,
-          monographAbout: null,
-          author: null
+          monographAbout: null
         }
       }
     },
     methods: {
       findAll: async function () {
-        const { data: res } = await this.$http.post('MonographController/findAll', this.pages)
+        const { data: res } = await this.$http.post('MonographController/pageFindMonographAuthor',
+          {
+            pages: this.pages,
+            employeeId: this.employeeInfo.employeeId
+          })
         if (!res.meta.access) {
           return this.$message.error(res.meta.msg)
         }
@@ -188,7 +187,7 @@
         this.findAll()
         this.$message.success(res.meta.msg)
       },
-      appendDialog: async function (monographId) {
+     /* appendDialog: async function (monographId) {
         this.appendChapterInfo.chapterResource = monographId
         this.appendChapterDialogVisible = true
       },
@@ -201,7 +200,7 @@
         this.appendChapterDialogVisible = false
         this.findAll()
         this.$message.success(res.meta.msg)
-      },
+      },*/
       updateDialog: async function(monographId){
         const { data: res } = await this.$http.get(`MonographController/findById/${monographId}`);
         if (!res.meta.access) {
@@ -218,6 +217,24 @@
         this.$message.success(res.meta.msg);
         this.updateDialogVisible = false;
         this.findAll();
+      },
+      deleteMonograph: async function (monographId) {
+        const result = await this.$confirm('删除专栏将会删除专栏下的所有章节和文章, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).catch(err => err)
+
+        if (result !== 'confirm') {
+          return
+        }
+
+        const { data: res } = await this.$http.get(`MonographController/delete/${monographId}`)
+        if (!res.meta.access) {
+          return this.$message.error(res.meta.msg)
+        }
+        this.$message.success(res.meta.msg)
+        this.findAll()
       },
       sizeChange: async function (newSize) {
         this.pages.pageSize = newSize
@@ -236,7 +253,9 @@
       }
     },
     created: function () {
-      this.findAll()
+      this.employeeInfo = JSON.parse(sessionStorage.getItem('employeeInfo'))
+      this.appendMonographInfo.author = this.employeeInfo.employeeId;
+      this.findAll();
     }
   }
 </script>

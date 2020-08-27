@@ -30,9 +30,9 @@ const routes = [
         component: () => import('../components/monograph/Monograph')
       },
       {
-        path: '/buildMonograph',
-        name: 'BuildMonograph',
-        component: () => import('../components/monograph/BuildMonograph')
+        path: '/allMonograph',
+        name: 'AllMonograph',
+        component: () => import('../components/monograph/AllMonograph')
       }
       ,
       {
@@ -64,6 +64,16 @@ const routes = [
         path: '/customer',
         name: 'Customer',
         component: () => import('../components/customer/Customer')
+      },
+      {
+        path: '/monographDetials',
+        name: 'MonographDetials',
+        component: () => import('../components/monograph/MonographDetials')
+      },
+      {
+        path: '/myMonograph',
+        name: 'MyMonograph',
+        component: () => import('../components/monograph/MyMonograph')
       }
     ]
   }

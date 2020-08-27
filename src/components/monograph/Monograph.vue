@@ -38,7 +38,7 @@
         <el-table-column type="index" label="#"></el-table-column>
         <el-table-column prop="monographName" label="专刊标题" :show-overflow-tooltip="true"></el-table-column>
         <el-table-column prop="cover" label="封面"></el-table-column>
-        <el-table-column prop="author" label="作者"></el-table-column>
+        <el-table-column prop="employeeInfo.employeeName" label="作者"></el-table-column>
         <el-table-column prop="price" label="价格"></el-table-column>
         <el-table-column prop="numberOfPurchasers" label="购买人数"></el-table-column>
         <el-table-column label="状态">
@@ -46,6 +46,7 @@
             <el-tag type="success" v-if="scope.row.offShelf == 0">未上架</el-tag>
             <el-tag type="warning" v-else-if="scope.row.offShelf == 1">已上架</el-tag>
             <el-tag type="danger" v-else-if="scope.row.offShelf == 2">已下架</el-tag>
+            <el-tag type="danger" v-else-if="scope.row.offShelf == 4">未完成</el-tag>
           </template>
         </el-table-column>
         <el-table-column label="优惠价格">
@@ -126,7 +127,10 @@
     },
     methods: {
       findAll: async function () {
-        const { data: res } = await this.$http.post('MonographController/findAll', this.pages)
+        const { data: res } = await this.$http.post('MonographController/pageFindMonographAuthor',  {
+          pages: this.pages,
+          employeeId: null
+        })
         if (!res.meta.access) {
           return this.$message.error(res.meta.msg)
         }
