@@ -24,29 +24,35 @@
 <script>
     export default {
         name: "PersonalCenter",
+
       data:function () {
           return{
-            employeeInfoList:{},
+            employeeInfoList:[],
           }
       },
       methods:{
+        created:function () {
+          this.PersonalCenter()
+        },
         //个人中心
         PersonalCenter: async function (employeeId) {
-          console.log("进来没")
-          this.employeeInfoList = sessionStorage.getItem("employeeInfo")
-          /*let info = sessionStorage.getItem("employeeInfo");
-          console.log("info:"+info)*/
-          this.show = true;
 
-          const { data: res } = await this.$http.get('EmployeeInfoController/findById/'+info)
+          let t = this
+          console.log("进来没")
+          var employeeInfoList = sessionStorage.getItem("employeeInfo")
+
+          console.log("aa+"+t.employeeInfoList)
+
+          const { data: res } = await this.$http.get('EmployeeInfoController/findById'+t.employeeInfoList)
           if (!res.meta.access) {
             return this.$message.error(res.meta.msg)
           }
           console.log(res)
-          res.meta=this.employeeInfoList;
+          t.employeeInfoList = res.data.employeeInfoList
+          t.employeeInfoList = res.employeeInfoList
 
+        }
 
-        },
       }
     }
 </script>

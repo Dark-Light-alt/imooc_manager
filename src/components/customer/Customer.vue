@@ -8,8 +8,8 @@
     <el-card>
       <el-row :gutter="20">
         <el-col :span="6">
-          <el-input placeholder="用户名称" v-model="pages.searchs.customerNickname" clearable @clear="selectPosition">
-            <el-button slot="append" icon="el-icon-search" @click="selectPosition"></el-button>
+          <el-input placeholder="用户名称" v-model="pages.searchs.customerNickname" clearable @clear="pagingFindAll">
+            <el-button slot="append" icon="el-icon-search" @click="pagingFindAll"></el-button>
           </el-input>
         </el-col>
       </el-row>
@@ -75,8 +75,8 @@
           }
       }
       ,methods:{
-        selectPosition: async function () {
-          const { data: res } = await this.$http.post('CustomerController/selectPosition', this.pages)
+        pagingFindAll: async function () {
+          const { data: res } = await this.$http.post('CustomerController/pagingFindAll', this.pages)
           if (!res.meta.access) {
             return this.$message.error(res.meta.msg)
           }
@@ -87,22 +87,22 @@
 
         sizeChange: async function (newSize) {
           this.pages.pageSize = newSize
-          this.selectPosition()
+          this.pagingFindAll()
         },
         currentChange: async function (newPage) {
           this.pages.currentPage = newPage
-          this.selectPosition()
+          this.pagingFindAll()
         },
         currentPage: async function (newPage) {
           this.pages.currentPage = newPage
-          this.selectPosition()
+          this.pagingFindAll()
         },
         dialogClose: function (formRef) {
           this.$refs[formRef].resetFields()
         }
       },
       created: function () {
-        this. selectPosition()
+        this. pagingFindAll()
       }
 
     }
