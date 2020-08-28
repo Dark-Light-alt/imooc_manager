@@ -60,10 +60,10 @@
             <el-button size="mini" type="warning" v-if="scope.row.offShelf == 1 && scope.row.price == null"
                        @click="showUpdateDialog(scope.row.monographId)">定价
             </el-button>
-            <el-button size="mini" type="warning" v-if="scope.row.offShelf == 1 && scope.row.price != null"
+            <el-button size="mini" type="warning" v-if="scope.row.offShelf == 2 && scope.row.price != null"
                        @click="showUpdateDialog(scope.row.monographId)">优惠
             </el-button>
-            <el-button size="mini" type="danger" v-if="scope.row.offShelf == 1"
+            <el-button size="mini" type="danger" v-if="scope.row.offShelf == 2"
                        @click="soldOut(scope.row.monographId)">下架
             </el-button>
           </template>
