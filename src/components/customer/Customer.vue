@@ -14,7 +14,6 @@
         </el-col>
       </el-row>
       <el-table :data="customerList">
-
         <el-table-column type="expand">
           <template slot-scope="scope">
             <el-form label-position="left">

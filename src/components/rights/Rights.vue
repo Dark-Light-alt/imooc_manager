@@ -25,8 +25,9 @@
         </el-table-column>
         <el-table-column label="操作">
           <template slot-scope="scope">
-            <el-button size="mini" icon="el-icon-edit" type="primary" @click="showUpdateDialog(scope.row.rightsId)">修改
-            </el-button>
+            <el-button size="mini" icon="el-icon-edit" type="primary"
+                       @click="showUpdateDialog(scope.row.rightsId)"></el-button>
+            <el-button size="mini" icon="el-icon-delete" type="danger" @click="remove(scope.row.rightsId)"></el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -162,6 +163,25 @@
         this.$message.success(res.meta.msg)
         this.treeFindAll()
         this.updateDialogVisible = false
+      },
+      remove: async function (rightsId) {
+        const result = await this.$confirm('是否删除此权限及子孙级, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).catch(err => err)
+
+        if (result !== 'confirm') {
+          return
+        }
+
+        const { data: res } = await this.$http.delete(`RightsController/remove/${rightsId}`)
+        if (!res.meta.access) {
+          return this.$message.error(res.meta.msg)
+        }
+
+        this.$message.success(res.meta.msg)
+        this.treeFindAll()
       },
       dialogClose: function (formRef) {
         this.$refs[formRef].resetFields()
