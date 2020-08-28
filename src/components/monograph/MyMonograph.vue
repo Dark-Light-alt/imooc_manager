@@ -44,13 +44,18 @@
         </el-table-column>
         <el-table-column label="操作" width="300">
           <template slot-scope="scope">
-           <!-- <el-button size="mini" type="primary" @click="appendDialog(scope.row.monographId)"
-                       v-if="scope.row.offShelf == 0">添加章节
-            </el-button>-->
+            <el-button size="mini" type="success" @click="updateStatus(scope.row.monographId)"
+                       v-if="scope.row.offShelf == 0">完成
+            </el-button>
             <el-button size="mini" type="primary" @click="updateDialog(scope.row.monographId)"
                        v-if="scope.row.offShelf == 0">修改
             </el-button>
-            <el-button size="mini" type="danger" @click="deleteMonograph(scope.row.monographId)">删除
+            <el-button size="mini" type="warning" @click="showChapterByMonographId(scope.row)">预览
+            </el-button>
+            <el-button size="mini" type="success" @click="direOper(scope.row)" v-if="scope.row.offShelf == 0">目录管理
+            </el-button>
+            <el-button size="mini" type="danger" @click="deleteMonograph(scope.row.monographId)"
+                       v-if="scope.row.offShelf == 0">删除
             </el-button>
           </template>
         </el-table-column>
@@ -62,8 +67,8 @@
       </el-pagination>
     </el-card>
 
-    <el-dialog title="添加专刊" :visible.sync="appendDialogVisible" width="50%" @close="dialogClose('appendForm')">
-      <el-form label-position="right" label-width="100px" :model="appendMonographInfo" ref="appendForm">
+    <el-dialog title="添加专刊" :visible.sync="appendDialogVisible" width="50%" :close-on-click-modal="false">
+      <el-form label-position="right" label-width="100px" :model="appendMonographInfo">
         <el-form-item label="专刊标题" prop="monographName">
           <el-input v-model="appendMonographInfo.monographName"></el-input>
         </el-form-item>
@@ -83,26 +88,8 @@
       </span>
     </el-dialog>
 
-   <!-- <el-dialog title="添加章节" :visible.sync="appendChapterDialogVisible" width="50%" @close="dialogClose('appendForm')">
-      <el-form label-position="right" label-width="100px" :model="appendChapterInfo" ref="appendForm">
-        <input v-model="appendChapterInfo.chapterResource" type="hidden"/>
-        <el-form-item label="章节标题" prop="chapterName">
-          <el-input v-model="appendChapterInfo.chapterName"></el-input>
-        </el-form-item>
-        <el-form-item label="章节简介" prop="chapterAbout">
-          <el-input v-model="appendChapterInfo.chapterAbout"></el-input>
-        </el-form-item>
-      </el-form>
-      <span slot="footer" class="dialog-footer">
-          <el-button @click="appendChapterDialogVisible = false">取消</el-button>
-          <el-button type="primary" @click="appendChapter()">确定</el-button>
-      </span>
-    </el-dialog>
--->
-
-
-    <el-dialog title="修改专刊信息" :visible.sync="updateDialogVisible" width="50%" @close="dialogClose('updateForm')">
-      <el-form label-position="right" label-width="100px" :model="appendMonographInfo" ref="updateForm">
+    <el-dialog title="修改专刊信息" :visible.sync="updateDialogVisible" width="50%" :close-on-click-modal="false">
+      <el-form label-position="right" label-width="100px" :model="appendMonographInfo">
         <el-form-item label="专刊标题" prop="monographName">
           <el-input v-model="updateMonographInfo.monographName"></el-input>
         </el-form-item>
@@ -148,13 +135,6 @@
           monographAbout: null,
           author: null
         },
-      /*  appendChapterDialogVisible: false,
-        appendChapterInfo: {
-          chapterName: null,
-          chapterAbout: null,
-          chapterType: 1,
-          chapterResource: null
-        },*/
         updateDialogVisible:false,
         updateMonographInfo:{
           monographName: null,
@@ -187,20 +167,6 @@
         this.findAll()
         this.$message.success(res.meta.msg)
       },
-     /* appendDialog: async function (monographId) {
-        this.appendChapterInfo.chapterResource = monographId
-        this.appendChapterDialogVisible = true
-      },
-      appendChapter: async function () {
-        const { data: res } = await this.$http.put('ChapterController/append', this.appendChapterInfo)
-        if (!res.meta.access) {
-          return this.$message.error(res.meta.msg)
-        }
-
-        this.appendChapterDialogVisible = false
-        this.findAll()
-        this.$message.success(res.meta.msg)
-      },*/
       updateDialog: async function(monographId){
         const { data: res } = await this.$http.get(`MonographController/findById/${monographId}`);
         if (!res.meta.access) {
@@ -230,6 +196,33 @@
         }
 
         const { data: res } = await this.$http.get(`MonographController/delete/${monographId}`)
+        if (!res.meta.access) {
+          return this.$message.error(res.meta.msg)
+        }
+        this.$message.success(res.meta.msg)
+        this.findAll()
+      },
+      showChapterByMonographId: async function(monograph){
+          this.$router.push({ name: 'MonographChapters',params: {monograph:monograph}});
+      },
+      direOper: async function(row){
+        this.$router.push({ name: 'DireMent',params: {monograph:row}});
+      },
+      updateStatus: async function (monographId) {
+        const result = await this.$confirm('完成之后将不能再修改, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).catch(err => err)
+
+        if (result !== 'confirm') {
+          return
+        }
+
+        const { data: res } = await this.$http.post(`MonographController/updateOffShelf`,{
+          monographId: monographId,
+          offShelf: 1
+        })
         if (!res.meta.access) {
           return this.$message.error(res.meta.msg)
         }
