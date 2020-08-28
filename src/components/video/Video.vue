@@ -23,7 +23,13 @@
       </el-row>
       <el-table :data="videoList">
         <el-table-column type="index" label="#"></el-table-column>
-        <el-table-column prop="videoName" label="课程视频名"></el-table-column>
+        <el-table-column prop="videoName" label="课程名"></el-table-column>
+        <el-table-column prop="tryAndSee" label="是否试看">
+          <template slot-scope="scope">
+            <el-tag v-if="scope.row.tryAndSee === 0" type="info">是</el-tag>
+            <el-tag v-if="scope.row.tryAndSee === 1" type="success">否</el-tag>
+          </template>
+        </el-table-column>
         <el-table-column prop="videoUrl" label="视频">
           <template slot-scope="scope">
             <video style="width: 200px;"
@@ -34,7 +40,8 @@
         </el-table-column>
         <el-table-column label="操作">
           <template slot-scope="scope">
-            <el-button size="mini" icon="el-icon-edit" type="primary" @click="showUpdateDialog(scope.row.videoId)"></el-button>
+            <el-button size="mini" icon="el-icon-edit" type="primary"
+                       @click="showUpdateDialog(scope.row.videoId)"></el-button>
             <el-button size="mini" icon="el-icon-delete" type="danger" @click="remove(scope.row.videoId)"></el-button>
           </template>
         </el-table-column>
@@ -54,8 +61,8 @@
         </el-form-item>
         <el-form-item label="是否试看" prop="tryAndSee">
           <el-radio-group v-model="appendVideoInfo.tryAndSee">
-            <el-radio :label="0">免费</el-radio>
-            <el-radio :label="1">付费</el-radio>
+            <el-radio :label="0">是</el-radio>
+            <el-radio :label="1">否</el-radio>
           </el-radio-group>
         </el-form-item>
         <el-form-item label="课程视频" prop="videoUrl">
@@ -89,6 +96,12 @@
         <el-form-item label="视频标题" prop="videoName">
           <el-input v-model="updateVideoInfo.videoName"></el-input>
         </el-form-item>
+        <el-form-item label="是否试看" prop="tryAndSee">
+          <el-radio-group v-model="updateVideoInfo.tryAndSee">
+            <el-radio :label="0">是</el-radio>
+            <el-radio :label="1">否</el-radio>
+          </el-radio-group>
+        </el-form-item>
         <el-form-item label="课程视频" prop="videoUrl">
           <el-upload
             class="upload-demo"
@@ -97,18 +110,17 @@
             :action="uploadUrl"
             :limit="1"
             :file-list="fileList"
-            :on-success="addVideoSuccess"
-            :on-remove="addVideoRemove"
+            :on-success="upVideoSuccess"
+            :on-remove="upVideoRemove"
             list-type="picture">
             <el-button size="small" type="primary">点击上传</el-button>
           </el-upload>
         </el-form-item>
-        <el-form-item label="是否试看" prop="tryAndSee">
-          <el-radio-group v-model="updateVideoInfo.tryAndSee">
-            <el-radio :label="0">免费</el-radio>
-            <el-radio :label="1">付费</el-radio>
-          </el-radio-group>
-        </el-form-item>
+        <el-col :span="10">
+          <el-form-item label="视频时长" prop="duration">
+            <el-input placeholder="NaN" disabled v-model="updateVideoInfo.duration"></el-input>
+          </el-form-item>
+        </el-col>
       </el-form>
       <span slot="footer" class="dialog-footer">
           <el-button @click="updateDialogVisible = false">取消</el-button>
@@ -241,6 +253,7 @@
       },
       upVideoRemove: function (file, fileList) {
         this.updateVideoInfo.videoUrl = null
+        this.updateVideoInfo.duration = null
       },
       sizeChange: async function (newSize) {
         this.pages.pageSize = newSize
