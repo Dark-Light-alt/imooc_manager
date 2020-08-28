@@ -35,7 +35,7 @@
                 </span>
               <el-dropdown-menu slot="dropdown">
                 <el-dropdown-item command="PersonalCenter">个人中心</el-dropdown-item>
-                <el-dropdown-item @click.native="UpdatePwd">修改密码</el-dropdown-item>
+                <el-dropdown-item command="ChangePassword">修改密码</el-dropdown-item>
                 <el-dropdown-item @click.native="exit">退出</el-dropdown-item>
               </el-dropdown-menu>
             </el-dropdown>

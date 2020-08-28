@@ -5,6 +5,7 @@ import store from './store'
 import './plugins/element.js'
 import './assets/css/global.css'
 
+
 import http from './assets/js/http'
 
 Vue.prototype.$http = http

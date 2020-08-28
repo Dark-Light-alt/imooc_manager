@@ -59,6 +59,10 @@ const routes = [
         path: '/personalCenter',
         name: 'PersonalCenter',
         component:()=>import('../components/PersonalCenter')
+      },
+      {path: '/changePassword',
+        name: 'ChangePassword',
+        component:()=>import('../components/ChangePassword')
       }
     ]
   }
