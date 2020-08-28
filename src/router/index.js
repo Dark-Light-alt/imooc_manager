@@ -74,21 +74,6 @@ const routes = [
         path: '/myMonograph',
         name: 'MyMonograph',
         component: () => import('../components/monograph/MyMonograph')
-      },
-      {
-        path: '/courseBuild',
-        name: 'CourseBuild',
-        component: () => import('../components/course/CourseBuild')
-      },
-      {
-        path: '/courseChapterManage',
-        name: 'CourseChapterManage',
-        component: () => import('../components/chapter/CourseChapterManage')
-      },
-      {
-        path: '/video',
-        name: 'Video',
-        component: () => import('../components/video/Video')
       }
     ]
   }
