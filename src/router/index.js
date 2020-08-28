@@ -23,6 +23,16 @@ const routes = [
         path: '/accountNumber',
         name: 'AccountNumber',
         component: () => import('../components/accountNumber/AccountNumber')
+      },
+      {
+        path: '/monograph',
+        name: 'Monograph',
+        component: () => import('../components/monograph/Monograph')
+      },
+      {
+        path: '/allMonograph',
+        name: 'AllMonograph',
+        component: () => import('../components/monograph/AllMonograph')
       }
       ,
       {
@@ -54,6 +64,16 @@ const routes = [
         path: '/customer',
         name: 'Customer',
         component: () => import('../components/customer/Customer')
+      },
+      {
+        path: '/monographDetials',
+        name: 'MonographDetials',
+        component: () => import('../components/monograph/MonographDetials')
+      },
+      {
+        path: '/myMonograph',
+        name: 'MyMonograph',
+        component: () => import('../components/monograph/MyMonograph')
       },
       {
         path: '/courseBuild',

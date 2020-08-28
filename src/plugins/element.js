@@ -34,6 +34,7 @@ import {
   Tag,
   Tooltip,
   Tree,
+  DatePicker,
   Upload,
   Progress,
   Image
@@ -74,6 +75,7 @@ Vue.use(Radio)
 Vue.use(Tag)
 Vue.use(Tooltip)
 Vue.use(Tree)
+Vue.use(DatePicker)
 Vue.use(Upload)
 Vue.use(Progress)
 Vue.use(Image)
