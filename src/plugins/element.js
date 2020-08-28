@@ -33,7 +33,8 @@ import {
   TableColumn,
   Tag,
   Tooltip,
-  Tree
+  Tree,
+  DatePicker
 } from 'element-ui'
 
 Vue.prototype.$message = Message
@@ -71,3 +72,4 @@ Vue.use(Radio)
 Vue.use(Tag)
 Vue.use(Tooltip)
 Vue.use(Tree)
+Vue.use(DatePicker)
