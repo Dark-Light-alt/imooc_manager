@@ -61,11 +61,6 @@ const routes = [
         component: () => import('../components/type/Type')
       },
       {
-        path: '/customer',
-        name: 'Customer',
-        component: () => import('../components/customer/Customer')
-      },
-      {
         path: '/courseBuild',
         name: 'CourseBuild',
         component: () => import('../components/course/CourseBuild')
@@ -76,9 +71,9 @@ const routes = [
         component: () => import('../components/chapter/CourseChapterManage')
       },
       {
-        path: '/video',
-        name: 'Video',
-        component: () => import('../components/video/Video')
+        path: '/videoManage',
+        name: 'VideoManage',
+        component: () => import('../components/video/VideoManage')
       },
       {
         path: '/previewCourse',
@@ -94,6 +89,21 @@ const routes = [
         path: '/myMonograph',
         name: 'MyMonograph',
         component: () => import('../components/monograph/MyMonograph')
+      },
+      {
+        path: '/videoView',
+        name: 'VideoView',
+        component: () => import('../components/video/VideoView')
+      },
+      {
+        path: '/courseManage',
+        name: 'CourseManage',
+        component: () => import('../components/course/CourseManage')
+      },
+      {
+        path: '/datasManage',
+        name: 'DatasManage',
+        component: () => import('../components/datas/DatasManage')
       }
     ]
   }

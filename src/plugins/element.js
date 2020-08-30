@@ -37,7 +37,9 @@ import {
   DatePicker,
   Upload,
   Progress,
-  Image
+  Image,
+  Tabs,
+  TabPane
 } from 'element-ui'
 
 Vue.prototype.$message = Message
@@ -79,3 +81,5 @@ Vue.use(DatePicker)
 Vue.use(Upload)
 Vue.use(Progress)
 Vue.use(Image)
+Vue.use(Tabs)
+Vue.use(TabPane)

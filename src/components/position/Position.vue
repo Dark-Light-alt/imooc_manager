@@ -201,7 +201,6 @@
         if (!res.meta.access) {
           return this.$message.error(res.meta.msg)
         }
-        this.allocationRightsDialogClose()
         this.$message.success(res.meta.msg)
         this.allocationRightsDialogVisible = false
       },
