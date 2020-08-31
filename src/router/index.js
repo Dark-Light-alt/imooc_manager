@@ -74,6 +74,16 @@ const routes = [
         path: '/myMonograph',
         name: 'MyMonograph',
         component: () => import('../components/monograph/MyMonograph')
+      },
+      {
+        path: '/personalCenter',
+        name: 'PersonalCenter',
+        component: () => import('../components/PersonalCenter')
+      },
+      {
+        path: '/changePassword',
+        name: 'ChangePassword',
+        component: () => import('../components/accountNumber/ChangePassword')
       }
     ]
   }
