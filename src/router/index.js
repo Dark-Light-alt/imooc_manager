@@ -66,14 +66,49 @@ const routes = [
         component: () => import('../components/customer/Customer')
       },
       {
-        path: '/monographDetials',
-        name: 'MonographDetials',
-        component: () => import('../components/monograph/MonographDetials')
-      },
-      {
         path: '/myMonograph',
         name: 'MyMonograph',
         component: () => import('../components/monograph/MyMonograph')
+      },
+      {
+        path: '/monographChapters',
+        name: 'MonographChapters',
+        component: () => import('../components/monograph/MonographChapters')
+      },
+      {
+        path: '/monogrphChapterManage',
+        name: 'MonogrphChapterManage',
+        component: () => import('../components/chapter/MonogrphChapterManage')
+      },
+      {
+        path: '/courseBuild',
+        name: 'CourseBuild',
+        component: () => import('../components/course/CourseBuild')
+      },
+      {
+        path: '/courseChapterManage',
+        name: 'CourseChapterManage',
+        component: () => import('../components/chapter/CourseChapterManage')
+      },
+      {
+        path: '/video',
+        name: 'Video',
+        component: () => import('../components/video/Video')
+      },
+      {
+        path: '/article',
+        name: 'Article',
+        component: () => import('../components/article/Article')
+      },
+      {
+        path: '/writeArticle',
+        name: 'WriteArticle',
+        component: () => import('../components/article/WriteArticle')
+      },
+      {
+        path: '/updateArticle',
+        name: 'UpdateArticle',
+        component: () => import('../components/article/UpdateArticle')
       }
     ]
   }

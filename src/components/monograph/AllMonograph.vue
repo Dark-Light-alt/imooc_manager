@@ -2,8 +2,8 @@
   <div>
     <el-breadcrumb separator="/">
       <el-breadcrumb-item :to="{ name: 'Home' }">首页</el-breadcrumb-item>
-      <el-breadcrumb-item :to="{ name: 'Home' }">权限管理</el-breadcrumb-item>
-      <el-breadcrumb-item>构建专刊</el-breadcrumb-item>
+      <el-breadcrumb-item :to="{ name: 'Home' }">专刊管理</el-breadcrumb-item>
+      <el-breadcrumb-item>所有专刊</el-breadcrumb-item>
     </el-breadcrumb>
     <el-card>
       <el-row :gutter="20">
@@ -92,8 +92,9 @@
         this.monographList = res.data.monographList
         this.pages = res.pages
       },
-      showChapterByMonographId: async function(monograph){
-        this.$router.push({ name: 'MonographChapters',params: {monograph:monograph}});
+      showChapterByMonographId: async function(row){
+        sessionStorage.setItem('monograph', JSON.stringify(row))
+        this.$router.push({ name: 'MonographChapters'});
       },
       sizeChange: async function (newSize) {
         this.pages.pageSize = newSize

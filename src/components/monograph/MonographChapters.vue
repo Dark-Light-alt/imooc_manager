@@ -2,7 +2,7 @@
   <div>
     <el-breadcrumb separator="/">
       <el-breadcrumb-item :to="{ name: 'Home' }">首页</el-breadcrumb-item>
-      <el-breadcrumb-item :to="{ name: 'Home' }">权限管理</el-breadcrumb-item>
+      <el-breadcrumb-item :to="{ name: 'MyMonograph' }">专栏管理</el-breadcrumb-item>
       <el-breadcrumb-item>专栏目录</el-breadcrumb-item>
     </el-breadcrumb>
     <el-card class="box-card">
@@ -33,11 +33,13 @@
     data: function(){
       return {
         chapterList: [],
-        monograph: ''
+        monograph: {}
       }
     },
     methods: {
       findAll: async function () {
+        this.monograph = Object.assign(this.monograph, JSON.parse(sessionStorage.getItem('monograph')))
+
         const { data: res } = await this.$http.get(`ChapterController/findACByMid/${this.monograph.monographId}`)
         if (!res.meta.access) {
           return this.$message.error(res.meta.msg)
@@ -45,7 +47,6 @@
         this.chapterList = res.data.chapterList
       },
     },created: function () {
-      this.monograph=this.$route.params.monograph;
       this.findAll();
     }
   }
