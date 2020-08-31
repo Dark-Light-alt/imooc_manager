@@ -27,7 +27,8 @@
           </div>
           <div class="header_right">
             <el-avatar shape="square" :size="40"
-                       src="https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif?imageView2/1/w/80/h/80"></el-avatar>
+                       src="https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif?imageView2/1/w/80/h/80">
+            </el-avatar>
             <span>{{consumer.name}}</span>
             <el-dropdown trigger="click" @command="handleCommand">
                 <span class="el-dropdown-link">

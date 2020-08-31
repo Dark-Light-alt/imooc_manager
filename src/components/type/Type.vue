@@ -34,6 +34,7 @@
         <el-table-column label="操作">
           <template slot-scope="scope">
             <el-button size="mini" icon="el-icon-edit" type="primary" @click="showUpdateDialog(scope.row.typeId)">
+              修改
             </el-button>
           </template>
         </el-table-column>
