@@ -8,6 +8,7 @@ import {
   Card,
   Col,
   Container,
+  DatePicker,
   Dialog,
   Dropdown,
   DropdownItem,
@@ -15,7 +16,9 @@ import {
   Form,
   FormItem,
   Header,
+  Image,
   Input,
+  InputNumber,
   Main,
   Menu,
   MenuItem,
@@ -23,6 +26,7 @@ import {
   MessageBox,
   Option,
   Pagination,
+  Progress,
   Radio,
   RadioGroup,
   Row,
@@ -31,15 +35,12 @@ import {
   Switch,
   Table,
   TableColumn,
+  TabPane,
+  Tabs,
   Tag,
   Tooltip,
   Tree,
-  DatePicker,
-  Upload,
-  Progress,
-  Image,
-  Tabs,
-  TabPane
+  Upload
 } from 'element-ui'
 
 Vue.prototype.$message = Message
@@ -83,3 +84,4 @@ Vue.use(Progress)
 Vue.use(Image)
 Vue.use(Tabs)
 Vue.use(TabPane)
+Vue.use(InputNumber)

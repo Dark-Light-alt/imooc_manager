@@ -104,6 +104,11 @@ const routes = [
         path: '/datasManage',
         name: 'DatasManage',
         component: () => import('../components/datas/DatasManage')
+      },
+      {
+        path: '/carousel',
+        name: 'Carousel',
+        component: () => import('../components/carousel/Carousel')
       }
     ]
   }
