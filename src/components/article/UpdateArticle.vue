@@ -59,7 +59,7 @@
       }
     },
     created:function(){
-      this.updateArticleInfo = this.$route.params.article;
+      this.updateArticleInfo = Object.assign(this.updateArticleInfo,JSON.parse(sessionStorage.getItem("article")));
       this.articleContent = this.$route.params.fileContent;
     }
   }

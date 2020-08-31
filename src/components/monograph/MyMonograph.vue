@@ -46,8 +46,8 @@
         <el-table-column prop="createTime" label="创建时间"></el-table-column>
         <el-table-column label="状态">
           <template slot-scope="scope">
-            <el-tag type="success" v-if="scope.row.offShelf == 0">未完成</el-tag>
-            <el-tag type="warning" v-else>已完成</el-tag>
+            <el-tag type="warning" v-if="scope.row.offShelf == 0">未完成</el-tag>
+            <el-tag type="success" v-else>已完成</el-tag>
           </template>
         </el-table-column>
         <el-table-column label="操作" width="300">
@@ -65,9 +65,9 @@
             <el-button v-if="scope.row.offShelf === 0" size="mini" icon="el-icon-delete" type="danger"
                        @click="deleteMonograph(scope.row.monographId)"></el-button>
 
-            <el-tooltip class="item" effect="dark" content="预览" placement="top-start" :enterable="false">
-              <el-button size="mini" type="warning" @click="showChapterByMonographId(scope.row)" icon="el-icon-more">
-              </el-button>
+            <el-tooltip class="item" effect="dark" content="专刊预览" placement="top-start" :enterable="false">
+              <el-button type="warning" size="mini" icon="el-icon-view"
+                         @click="showChapterByMonographId(scope.row)"></el-button>
             </el-tooltip>
           </template>
         </el-table-column>
@@ -247,7 +247,7 @@
       },
       showChapterByMonographId: async function(row){
         sessionStorage.setItem('monograph', JSON.stringify(row))
-          this.$router.push({ name: 'MonographChapters'});
+        this.$router.push({ name: 'PreviewMonograph'});
       },
       direOper: async function(row){
         sessionStorage.setItem('monograph', JSON.stringify(row))

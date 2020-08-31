@@ -38,7 +38,7 @@
         <el-table-column label="操作">
           <template slot-scope="scope">
             <el-tooltip class="item" effect="dark" content="文章管理" placement="top-start" :enterable="false">
-              <el-button size="mini" icon="el-icon-document" type="primary" @click="articleManage(scope.row)"></el-button>
+              <el-button size="mini" icon="el-icon-document" type="success" @click="articleManage(scope.row)"></el-button>
             </el-tooltip>
             <el-button size="mini" icon="el-icon-edit" type="primary"
                        @click="showUpdateDialog(scope.row.chapterId)"></el-button>
@@ -130,9 +130,7 @@
     },
     methods: {
       findAll: async function () {
-
         this.monograph = Object.assign(this.monograph, JSON.parse(sessionStorage.getItem('monograph')))
-
         const { data: res } = await this.$http.post('ChapterController/findChapter', {
           pages: this.pages,
           chapterResource: this.monograph.monographId
@@ -190,7 +188,7 @@
         this.$message.success(res.meta.msg)
         this.findAll()
       },
-      articleManage:  function (row) {
+      articleManage:  async function (row) {
         sessionStorage.setItem('chapter', JSON.stringify(row))
         this.$router.push({ name: 'Article'})
       },

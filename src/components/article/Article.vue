@@ -18,7 +18,7 @@
           </el-input>
         </el-col>
         <el-col :span="12">
-          <el-button type="success" @click="writeArticle">写文章</el-button>
+          <el-button type="success" icon="el-icon-edit-outline" @click="writeArticle">写文章</el-button>
         </el-col>
       </el-row>
       <el-table :data="articleList">
@@ -31,8 +31,11 @@
         </el-table-column>
         <el-table-column label="操作">
           <template slot-scope="scope">
-            <el-button size="mini" type="success" @click="showArticle(scope.row.articleId)">预览</el-button>
             <el-button size="mini" icon="el-icon-edit" type="primary" @click="updateArticle(scope.row.articleId)"></el-button>
+            <el-tooltip class="item" effect="dark" content="文章预览" placement="top-start" :enterable="false">
+              <el-button type="warning" size="mini" icon="el-icon-view"
+                         @click="showArticle(scope.row.articleId)"></el-button>
+            </el-tooltip>
             <el-button size="mini" icon="el-icon-delete" type="danger" @click="remove(scope.row.articleId)"></el-button>
           </template>
         </el-table-column>
@@ -114,8 +117,10 @@
           return this.$message.error(res.meta.msg)
         }
 
+        //将文章对象保存在sessionStorage中
+        sessionStorage.setItem("article",JSON.stringify(res.data.article))
         //跳页面修改文章
-        this.$router.push({name:"UpdateArticle",params:{fileContent:res.data.fileContent,article:res.data.article}});
+        this.$router.push({name:"UpdateArticle",params:{fileContent:res.data.fileContent}});
       },
       showArticle: async function (articleId) {
         //访问后台读取文件

@@ -104,12 +104,6 @@ const routes = [
         path: '/carousel',
         name: 'Carousel',
         component: () => import('../components/carousel/Carousel')
-      }
-      ,
-      {
-        path: '/monographChapters',
-        name: 'MonographChapters',
-        component: () => import('../components/monograph/MonographChapters')
       },
       {
         path: '/monogrphChapterManage',
@@ -140,6 +134,11 @@ const routes = [
         path: '/updateArticle',
         name: 'UpdateArticle',
         component: () => import('../components/article/UpdateArticle')
+      },
+      {
+        path: '/previewMonograph',
+        name: 'PreviewMonograph',
+        component: () => import('../components/monograph/PreviewMonograph')
       }
     ]
   }

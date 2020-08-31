@@ -36,15 +36,19 @@
         <el-table-column prop="createTime" label="创建时间"></el-table-column>
         <el-table-column label="状态">
           <template slot-scope="scope">
-            <el-tag type="success" v-if="scope.row.offShelf == 1">未上架</el-tag>
-            <el-tag type="warning" v-else-if="scope.row.offShelf == 2">已上架</el-tag>
+            <el-tag type="primary" v-if="scope.row.offShelf == 1">未上架</el-tag>
+            <el-tag type="success" v-else-if="scope.row.offShelf == 2">已上架</el-tag>
             <el-tag type="danger" v-else-if="scope.row.offShelf == 3">已下架</el-tag>
+            <el-tag type="warning" v-else-if="scope.row.offShelf == 0">未完成</el-tag>
           </template>
         </el-table-column>
         <el-table-column label="操作" width="300">
           <template slot-scope="scope">
-            <el-button size="mini" type="warning" @click="showChapterByMonographId(scope.row)">预览
-            </el-button>
+            <el-button type="warning" size="mini" @click="showChapterByMonographId(scope.row)">预览</el-button>
+            <el-button type="success" size="mini" @click="showDialog(scope.row.monographId)"
+                       v-if="scope.row.offShelf==1">上架</el-button>
+            <el-button type="danger" size="mini" @click="soldOut(scope.row.monographId)"
+                       v-if="scope.row.offShelf==2">下架</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -55,6 +59,17 @@
       </el-pagination>
     </el-card>
 
+    <el-dialog title="上架" :visible.sync="updatePriceVisible" width="50%" @close="dialogClose('updateForm')">
+      <el-form label-position="right" label-width="100px" :model="updateMonographInfo" ref="updateForm">
+        <el-form-item label="价格" prop="price">
+          <el-input v-model="updateMonographInfo.price"></el-input>
+        </el-form-item>
+      </el-form>
+      <span slot="footer" class="dialog-footer">
+          <el-button @click="updatePriceVisible = false">取消</el-button>
+          <el-button type="primary" @click="updatePrice()">确定</el-button>
+      </span>
+    </el-dialog>
 
 
   </div>
@@ -76,7 +91,9 @@
           flag: true
         },
         monographList: [],
-        chapters: []
+        chapters: [],
+        updatePriceVisible: false,
+        updateMonographInfo:{}
       }
     },
     methods: {
@@ -94,7 +111,44 @@
       },
       showChapterByMonographId: async function(row){
         sessionStorage.setItem('monograph', JSON.stringify(row))
-        this.$router.push({ name: 'MonographChapters'});
+        this.$router.push({ name: 'PreviewMonograph'});
+      },
+      showDialog: async function(monographId){
+        this.updateMonographInfo.monographId = monographId;
+        this.updatePriceVisible = true;
+      },
+      updatePrice: async function () {
+        //上架
+        this.updateMonographInfo.offShelf = 2;
+        const {data: res } = await this.$http.put("MonographController/putAway",this.updateMonographInfo)
+        if(!res.meta.access){
+          return this.$message.error(res.meta.msg)
+        }
+        this.$message.success(res.meta.msg)
+        this.updatePriceVisible = false;
+        this.findAll()
+      },
+      soldOut: async function (monographId) {
+        //下架
+        const result = await this.$confirm('是否下架此商品, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).catch(err => err)
+
+        if (result !== 'confirm') {
+          return
+        }
+
+        const {data: res} = await this.$http.post("MonographController/updateOffShelf",{
+          monographId: monographId,
+          offShelf: 3
+        })
+        if (!res.meta.access) {
+          return this.$message.error(res.meta.msg)
+        }
+        this.$message.success(res.meta.msg)
+        this.findAll()
       },
       sizeChange: async function (newSize) {
         this.pages.pageSize = newSize

@@ -54,7 +54,7 @@
         this.$message.success(res.meta.msg)
         //添加成功返回Article页面
         this.$router.push({name:"Article"});
-    },
+    }
     }
   }
 </script>
