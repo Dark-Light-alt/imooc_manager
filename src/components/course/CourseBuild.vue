@@ -54,15 +54,22 @@
             <el-tag type="success" v-else-if="scope.row.courseStatus !== 0">已完成</el-tag>
           </template>
         </el-table-column>
-        <el-table-column label="操作" width="300px">
+        <el-table-column label="操作" width="350px">
           <template slot-scope="scope">
             <el-tooltip class="item" effect="dark" content="课程发布" placement="top-start" :enterable="false">
               <el-button v-if="scope.row.courseStatus === 0" type="success" size="mini"
-                         icon="el-icon-check"></el-button>
+                         icon="el-icon-check" @click="courseRelease(scope.row.courseId)"></el-button>
             </el-tooltip>
             <el-tooltip class="item" effect="dark" content="目录管理" placement="top-start" :enterable="false">
               <el-button v-if="scope.row.courseStatus === 0" size="mini" icon="el-icon-tickets"
                          @click="showChapter(scope.row)"></el-button>
+            </el-tooltip>
+            <el-tooltip class="item" effect="dark" content="资料管理" placement="top-start" :enterable="false">
+              <el-button v-if="scope.row.courseStatus === 0" size="mini" icon="el-icon-document"
+                         @click="showDatas(scope.row)"></el-button>
+            </el-tooltip>
+            <el-tooltip class="item" effect="dark" content="课程预览" placement="top-start" :enterable="false">
+              <el-button type="info" size="mini" icon="el-icon-view" @click="previewCourse(scope.row)"></el-button>
             </el-tooltip>
             <el-button v-if="scope.row.courseStatus === 0" size="mini" icon="el-icon-edit" type="primary"
                        @click="showUpdateDialog(scope.row.courseId)"></el-button>
@@ -85,7 +92,7 @@
           <el-input v-model="appendCourseInfo.courseName"></el-input>
         </el-form-item>
         <el-form-item label="课程简介" prop="courseAbout">
-          <el-input type="textarea" v-model="appendCourseInfo.courseAbout"></el-input>
+          <el-input type="textarea" :rows="6" v-model="appendCourseInfo.courseAbout"></el-input>
         </el-form-item>
         <el-form-item label="课程封面" prop="cover">
           <el-upload
@@ -129,7 +136,7 @@
           <el-input v-model="updateCourseInfo.courseName"></el-input>
         </el-form-item>
         <el-form-item label="课程简介" prop="courseAbout">
-          <el-input type="textarea" v-model="updateCourseInfo.courseAbout"></el-input>
+          <el-input type="textarea" :rows="6" v-model="updateCourseInfo.courseAbout"></el-input>
         </el-form-item>
         <el-form-item label="课程封面" prop="cover">
           <el-upload
@@ -194,7 +201,7 @@
           author: null,
           typeId: null,
           duration: 0,
-          isfree: 0,
+          isfree: 1,
           courseLevel: 0
         },
         updateDialogVisible: false,
@@ -227,6 +234,22 @@
         this.courseList = res.data.courseList
         this.pages = res.pages
       },
+      courseRelease: async function (courseId) {
+        const result = await this.$confirm('是否发布此课程，发布之后不可以进行更改, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).catch(err => err)
+        if (result !== 'confirm') {
+          return
+        }
+        const { data: res } = await this.$http.get(`CourseController/changeStatus/${courseId}/1`)
+        if (!res.meta.access) {
+          return this.$message.error(res.meta.msg)
+        }
+        this.$message.success('课程发布成功')
+        this.findByAuthor()
+      },
       findType: async function () {
         const { data: res } = await this.$http.get('TypeController/findAll')
         if (!res.meta.access) {
@@ -244,6 +267,10 @@
         this.$message.success(res.meta.msg)
         this.findByAuthor()
         this.appendDialogVisible = false
+      },
+      previewCourse: function (row) {
+        sessionStorage.setItem('course', JSON.stringify(row))
+        this.$router.push({ name: 'PreviewCourse' })
       },
       showUpdateDialog: async function (courseId) {
         this.findType()
@@ -267,9 +294,13 @@
         this.findByAuthor()
         this.updateDialogVisible = false
       },
-      showChapter: async function (row) {
+      showChapter: function (row) {
         sessionStorage.setItem('course', JSON.stringify(row))
         this.$router.push({ name: 'CourseChapterManage' })
+      },
+      showDatas: function (row) {
+        sessionStorage.setItem('course', JSON.stringify(row))
+        this.$router.push({ name: 'DatasManage' })
       },
       remove: async function (courseId) {
         const result = await this.$confirm('是否删除此课程及对应的所有数据, 是否继续?', '提示', {

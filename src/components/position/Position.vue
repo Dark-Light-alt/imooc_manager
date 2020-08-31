@@ -66,7 +66,7 @@
 
     <el-dialog title="分配权限" :visible.sync="allocationRightsDialogVisible" width="50%">
       <el-tree :data="rightsList" :props="treeProps" show-checkbox node-key="rightsId" default-expand-all
-               :default-checked-keys="checkedKey" ref="treeRef" @close="allocationRightsDialogClose"></el-tree>
+               :default-checked-keys="checkedKey" ref="treeRef"></el-tree>
       <span slot="footer" class="dialog-footer">
           <el-button @click="allocationRightsDialogVisible = false">取消</el-button>
           <el-button type="primary" @click="allocationRights">确定</el-button>
@@ -168,7 +168,7 @@
         this.pagingFindAll()
       },
       showAllocationRightsDialog: async function (positionId) {
-
+        this.checkedKey = []
         this.positionId = positionId
 
         const { data: res } = await this.$http.get('RightsController/treeFindAll')
@@ -187,9 +187,6 @@
         this.checkedKey = r.data.haveThreeRights
         this.allocationRightsDialogVisible = true
       },
-      allocationRightsDialogClose: function () {
-        this.checkedKey = []
-      },
       allocationRights: async function () {
         const keys = [
           ...this.$refs.treeRef.getCheckedKeys(),
@@ -204,7 +201,6 @@
         if (!res.meta.access) {
           return this.$message.error(res.meta.msg)
         }
-        this.allocationRightsDialogClose()
         this.$message.success(res.meta.msg)
         this.allocationRightsDialogVisible = false
       },

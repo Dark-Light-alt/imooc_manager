@@ -61,15 +61,51 @@ const routes = [
         component: () => import('../components/type/Type')
       },
       {
-        path: '/customer',
-        name: 'Customer',
-        component: () => import('../components/customer/Customer')
+        path: '/courseBuild',
+        name: 'CourseBuild',
+        component: () => import('../components/course/CourseBuild')
+      },
+      {
+        path: '/courseChapterManage',
+        name: 'CourseChapterManage',
+        component: () => import('../components/chapter/CourseChapterManage')
+      },
+      {
+        path: '/videoManage',
+        name: 'VideoManage',
+        component: () => import('../components/video/VideoManage')
+      },
+      {
+        path: '/previewCourse',
+        name: 'PreviewCourse',
+        component: () => import('../components/course/PreviewCourse')
       },
       {
         path: '/myMonograph',
         name: 'MyMonograph',
         component: () => import('../components/monograph/MyMonograph')
       },
+      {
+        path: '/videoView',
+        name: 'VideoView',
+        component: () => import('../components/video/VideoView')
+      },
+      {
+        path: '/courseManage',
+        name: 'CourseManage',
+        component: () => import('../components/course/CourseManage')
+      },
+      {
+        path: '/datasManage',
+        name: 'DatasManage',
+        component: () => import('../components/datas/DatasManage')
+      },
+      {
+        path: '/carousel',
+        name: 'Carousel',
+        component: () => import('../components/carousel/Carousel')
+      }
+      ,
       {
         path: '/monographChapters',
         name: 'MonographChapters',
@@ -89,11 +125,6 @@ const routes = [
         path: '/courseChapterManage',
         name: 'CourseChapterManage',
         component: () => import('../components/chapter/CourseChapterManage')
-      },
-      {
-        path: '/video',
-        name: 'Video',
-        component: () => import('../components/video/Video')
       },
       {
         path: '/article',

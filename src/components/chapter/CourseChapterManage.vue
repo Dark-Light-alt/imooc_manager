@@ -62,7 +62,7 @@
           <el-input v-model="appendChapterInfo.chapterName"></el-input>
         </el-form-item>
         <el-form-item label="章节简介" prop="chapterAbout">
-          <el-input type="textarea" v-model="appendChapterInfo.chapterAbout"></el-input>
+          <el-input type="textarea" :rows="4" v-model="appendChapterInfo.chapterAbout"></el-input>
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
@@ -78,7 +78,7 @@
           <el-input v-model="updateChapterInfo.chapterName"></el-input>
         </el-form-item>
         <el-form-item label="章节简介" prop="chapterAbout">
-          <el-input type="textarea" v-model="updateChapterInfo.chapterAbout"></el-input>
+          <el-input type="textarea" :rows="4" v-model="updateChapterInfo.chapterAbout"></el-input>
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
@@ -126,9 +126,7 @@
     },
     methods: {
       findCourseChapter: async function () {
-
         this.course = Object.assign(this.course, JSON.parse(sessionStorage.getItem('course')))
-
         const { data: res } = await this.$http.post('ChapterController/findChapter', {
           pages: this.pages,
           chapterResource: this.course.courseId
@@ -190,7 +188,7 @@
       },
       showVideo: function (row) {
         sessionStorage.setItem('chapter', JSON.stringify(row))
-        this.$router.push({ name: 'Video' })
+        this.$router.push({ name: 'VideoManage' })
       },
       sizeChange: async function (newSize) {
         this.pages.pageSize = newSize
