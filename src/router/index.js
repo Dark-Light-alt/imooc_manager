@@ -61,24 +61,9 @@ const routes = [
         component: () => import('../components/type/Type')
       },
       {
-        path: '/courseBuild',
-        name: 'CourseBuild',
-        component: () => import('../components/course/CourseBuild')
-      },
-      {
-        path: '/courseChapterManage',
-        name: 'CourseChapterManage',
-        component: () => import('../components/chapter/CourseChapterManage')
-      },
-      {
-        path: '/videoManage',
-        name: 'VideoManage',
-        component: () => import('../components/video/VideoManage')
-      },
-      {
-        path: '/previewCourse',
-        name: 'PreviewCourse',
-        component: () => import('../components/course/PreviewCourse')
+        path: '/monographDetials',
+        name: 'MonographDetials',
+        component: () => import('../components/monograph/MonographDetials')
       },
       {
         path: '/myMonograph',
@@ -86,59 +71,14 @@ const routes = [
         component: () => import('../components/monograph/MyMonograph')
       },
       {
-        path: '/videoView',
-        name: 'VideoView',
-        component: () => import('../components/video/VideoView')
+        path: '/personalCenter',
+        name: 'PersonalCenter',
+        component: () => import('../components/PersonalCenter')
       },
       {
-        path: '/courseManage',
-        name: 'CourseManage',
-        component: () => import('../components/course/CourseManage')
-      },
-      {
-        path: '/datasManage',
-        name: 'DatasManage',
-        component: () => import('../components/datas/DatasManage')
-      },
-      {
-        path: '/carousel',
-        name: 'Carousel',
-        component: () => import('../components/carousel/Carousel')
-      },
-      {
-        path: '/monogrphChapterManage',
-        name: 'MonogrphChapterManage',
-        component: () => import('../components/chapter/MonogrphChapterManage')
-      },
-      {
-        path: '/courseBuild',
-        name: 'CourseBuild',
-        component: () => import('../components/course/CourseBuild')
-      },
-      {
-        path: '/courseChapterManage',
-        name: 'CourseChapterManage',
-        component: () => import('../components/chapter/CourseChapterManage')
-      },
-      {
-        path: '/article',
-        name: 'Article',
-        component: () => import('../components/article/Article')
-      },
-      {
-        path: '/writeArticle',
-        name: 'WriteArticle',
-        component: () => import('../components/article/WriteArticle')
-      },
-      {
-        path: '/updateArticle',
-        name: 'UpdateArticle',
-        component: () => import('../components/article/UpdateArticle')
-      },
-      {
-        path: '/previewMonograph',
-        name: 'PreviewMonograph',
-        component: () => import('../components/monograph/PreviewMonograph')
+        path: '/changePassword',
+        name: 'ChangePassword',
+        component: () => import('../components/accountNumber/ChangePassword')
       }
     ]
   }
