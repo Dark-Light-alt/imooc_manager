@@ -2,7 +2,8 @@
   <div>
     <el-breadcrumb separator="/">
       <el-breadcrumb-item :to="{ name: 'Home' }">首页</el-breadcrumb-item>
-      <el-breadcrumb-item :to="{ name: 'MyMonograph' }">构建课程</el-breadcrumb-item>
+      <el-breadcrumb-item :to="{ name: 'Home' }">专刊管理</el-breadcrumb-item>
+      <el-breadcrumb-item :to="{ name: 'MyMonograph' }">构建专刊</el-breadcrumb-item>
       <el-breadcrumb-item :to="{ name: 'MonogrphChapterManage' }">目录管理</el-breadcrumb-item>
       <el-breadcrumb-item>文章管理</el-breadcrumb-item>
     </el-breadcrumb>

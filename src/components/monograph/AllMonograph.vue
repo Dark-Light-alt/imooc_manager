@@ -59,7 +59,7 @@
       </el-pagination>
     </el-card>
 
-    <el-dialog title="上架" :visible.sync="updatePriceVisible" width="50%" @close="dialogClose('updateForm')">
+    <el-dialog title="上架" :visible.sync="updatePriceVisible" width="50%" @close="dialogClose('updateForm')" :close-on-click-modal="false">
       <el-form label-position="right" label-width="100px" :model="updateMonographInfo" ref="updateForm">
         <el-form-item label="价格" prop="price">
           <el-input v-model="updateMonographInfo.price"></el-input>
