@@ -61,11 +61,6 @@ const routes = [
         component: () => import('../components/type/Type')
       },
       {
-        path: '/customer',
-        name: 'Customer',
-        component: () => import('../components/customer/Customer')
-      },
-      {
         path: '/monographDetials',
         name: 'MonographDetials',
         component: () => import('../components/monograph/MonographDetials')
