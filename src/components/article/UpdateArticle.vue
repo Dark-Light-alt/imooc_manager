@@ -33,18 +33,19 @@
 <script>
   export default {
     name: 'UpdateArticle',
-    data: function(){
+    data: function () {
       return {
-        updateArticleInfo:{
-          articleId:'',
-          articleName:'',
-          articleUrl:'',
-          tryReading:null,
-          chapterId:''
+        updateArticleInfo: {
+          articleId: '',
+          articleName: '',
+          articleUrl: '',
+          tryReading: null,
+          chapterId: ''
         },
-        articleContent:''
+        articleContent: ''
       }
-    },methods:{
+    },
+    methods: {
       updateArticle: async function () {
         const { data: res } = await this.$http.post('ArticleController/updateArticle', {
           article: this.updateArticleInfo,
@@ -55,12 +56,12 @@
         }
         this.$message.success(res.meta.msg)
         //添加成功返回Article页面
-        this.$router.push({name:"Article"});
+        this.$router.push({ name: "Article" });
       }
     },
-    created:function(){
-      this.updateArticleInfo = Object.assign(this.updateArticleInfo,JSON.parse(sessionStorage.getItem("article")));
-      this.articleContent = this.$route.params.fileContent;
+    created: function () {
+      this.updateArticleInfo = Object.assign(this.updateArticleInfo, JSON.parse(sessionStorage.getItem("article")));
+      this.articleContent = this.$route.query.fileContent;
     }
   }
 </script>

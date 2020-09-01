@@ -108,7 +108,7 @@
       },
       writeArticle: async function () {
         //写文章
-        this.$router.push({name:"WriteArticle",params:{str:'',chapterId:this.chapter.chapterId}});
+        this.$router.push({name:"WriteArticle",query:{str:'',chapterId:this.chapter.chapterId}});
       },
       updateArticle: async function (articleId) {
         //访问后台读取文件
@@ -120,7 +120,7 @@
         //将文章对象保存在sessionStorage中
         sessionStorage.setItem("article",JSON.stringify(res.data.article))
         //跳页面修改文章
-        this.$router.push({name:"UpdateArticle",params:{fileContent:res.data.fileContent}});
+        this.$router.push({name:"UpdateArticle",query:{fileContent:res.data.fileContent}});
       },
       showArticle: async function (articleId) {
         //访问后台读取文件

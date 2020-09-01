@@ -38,7 +38,7 @@
         appendArticleInfo:{
           articleName:'',
           tryReading:0,
-          chapterId:this.$route.params.chapterId
+          chapterId:this.$route.query.chapterId
         },
         articleContent:''
       }
@@ -52,9 +52,20 @@
           return this.$message.error(res.meta.msg)
         }
         this.$message.success(res.meta.msg)
+        this.articleContent='';
         //添加成功返回Article页面
         this.$router.push({name:"Article"});
-    }
+      },
+      save: async function(){
+        window.localStorage.setItem("content",JSON.stringify(this.articleContent));
+      }
+    },
+    created: function(){
+      window.addEventListener('beforeunload',this.save);
+      this.articleContent = JSON.parse(window.localStorage.getItem("content"));
+    },
+    destroyed: function(){
+      window.removeEventListener('beforeunload',this.save())
     }
   }
 </script>
