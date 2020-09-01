@@ -2,7 +2,7 @@
   <div>
     <el-breadcrumb separator="/">
       <el-breadcrumb-item :to="{ name: 'Home' }">首页</el-breadcrumb-item>
-      <el-breadcrumb-item :to="{ name: 'Home' }">权限管理</el-breadcrumb-item>
+      <el-breadcrumb-item :to="{ name: 'Home' }">专刊管理</el-breadcrumb-item>
       <el-breadcrumb-item>构建专刊</el-breadcrumb-item>
     </el-breadcrumb>
     <el-card>
@@ -34,29 +34,41 @@
         </el-table-column>
         <el-table-column type="index" label="#"></el-table-column>
         <el-table-column prop="monographName" label="专刊标题" :show-overflow-tooltip="true"></el-table-column>
-        <el-table-column prop="cover" label="封面"></el-table-column>
+        <el-table-column prop="cover" label="封面">
+          <template slot-scope="scope">
+            <el-image
+              style="border-radius: 5px"
+              :src="scope.row.cover"
+              fit="scale-down">
+            </el-image>
+          </template>
+        </el-table-column>
         <el-table-column prop="createTime" label="创建时间"></el-table-column>
         <el-table-column label="状态">
           <template slot-scope="scope">
-            <el-tag type="success" v-if="scope.row.offShelf == 0">未完成</el-tag>
-            <el-tag type="warning" v-else>已完成</el-tag>
+            <el-tag type="warning" v-if="scope.row.offShelf == 0">未完成</el-tag>
+            <el-tag type="success" v-else>已完成</el-tag>
           </template>
         </el-table-column>
         <el-table-column label="操作" width="300">
           <template slot-scope="scope">
-            <el-button size="mini" type="success" @click="updateStatus(scope.row.monographId)"
-                       v-if="scope.row.offShelf == 0">完成
-            </el-button>
-            <el-button size="mini" type="primary" @click="updateDialog(scope.row.monographId)"
-                       v-if="scope.row.offShelf == 0">修改
-            </el-button>
-            <el-button size="mini" type="warning" @click="showChapterByMonographId(scope.row)">预览
-            </el-button>
-            <el-button size="mini" type="success" @click="direOper(scope.row)" v-if="scope.row.offShelf == 0">目录管理
-            </el-button>
-            <el-button size="mini" type="danger" @click="deleteMonograph(scope.row.monographId)"
-                       v-if="scope.row.offShelf == 0">删除
-            </el-button>
+            <el-tooltip class="item" effect="dark" content="完成专栏" placement="top-start" :enterable="false">
+              <el-button v-if="scope.row.offShelf === 0" type="success" size="mini"
+                         icon="el-icon-check" @click="updateStatus(scope.row.monographId)"></el-button>
+            </el-tooltip>
+            <el-tooltip class="item" effect="dark" content="目录管理" placement="top-start" :enterable="false">
+              <el-button v-if="scope.row.offShelf === 0" size="mini" icon="el-icon-tickets"
+                         @click="direOper(scope.row)"></el-button>
+            </el-tooltip>
+            <el-button v-if="scope.row.offShelf === 0" size="mini" icon="el-icon-edit" type="primary"
+                       @click="updateDialog(scope.row.monographId)"></el-button>
+            <el-button v-if="scope.row.offShelf === 0" size="mini" icon="el-icon-delete" type="danger"
+                       @click="deleteMonograph(scope.row.monographId)"></el-button>
+
+            <el-tooltip class="item" effect="dark" content="专刊预览" placement="top-start" :enterable="false">
+              <el-button type="warning" size="mini" icon="el-icon-view"
+                         @click="showChapterByMonographId(scope.row)"></el-button>
+            </el-tooltip>
           </template>
         </el-table-column>
       </el-table>
@@ -67,19 +79,30 @@
       </el-pagination>
     </el-card>
 
-    <el-dialog title="添加专刊" :visible.sync="appendDialogVisible" width="50%" :close-on-click-modal="false">
-      <el-form label-position="right" label-width="100px" :model="appendMonographInfo">
+    <el-dialog title="添加专刊" :visible.sync="appendDialogVisible" width="50%"
+               @close="dialogClose('appendForm')" :close-on-click-modal="false">
+      <el-form label-position="right" label-width="100px" :model="appendMonographInfo" ref="appendForm">
         <el-form-item label="专刊标题" prop="monographName">
           <el-input v-model="appendMonographInfo.monographName"></el-input>
         </el-form-item>
         <el-form-item label="背景图" prop="cover">
-          <el-input v-model="appendMonographInfo.cover"></el-input>
+          <el-upload
+            class="upload-demo"
+            ref="upload"
+            :action="uploadUrl"
+            :accept="accept"
+            :limit="1"
+            :on-success="addCoverSuccess"
+            :on-remove="addCoverRemove"
+            list-type="picture">
+            <el-button size="small" type="primary">点击上传</el-button>
+          </el-upload>
         </el-form-item>
         <el-form-item label="亮点" prop="highlights">
-          <el-input v-model="appendMonographInfo.highlights"></el-input>
+          <el-input type="textarea" v-model="appendMonographInfo.highlights"></el-input>
         </el-form-item>
         <el-form-item label="简介" prop="monographAbout">
-          <el-input v-model="appendMonographInfo.monographAbout"></el-input>
+          <el-input type="textarea" v-model="appendMonographInfo.monographAbout"></el-input>
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
@@ -88,19 +111,31 @@
       </span>
     </el-dialog>
 
-    <el-dialog title="修改专刊信息" :visible.sync="updateDialogVisible" width="50%" :close-on-click-modal="false">
-      <el-form label-position="right" label-width="100px" :model="appendMonographInfo">
+    <el-dialog title="修改专刊信息" :visible.sync="updateDialogVisible" width="50%"
+               @close="dialogClose('updateForm')" :close-on-click-modal="false">
+      <el-form label-position="right" label-width="100px" :model="appendMonographInfo" ref="updateForm">
         <el-form-item label="专刊标题" prop="monographName">
           <el-input v-model="updateMonographInfo.monographName"></el-input>
         </el-form-item>
         <el-form-item label="背景图" prop="cover">
-          <el-input v-model="updateMonographInfo.cover"></el-input>
+          <el-upload
+            class="upload-demo"
+            ref="upload"
+            :action="uploadUrl"
+            :accept="accept"
+            :limit="1"
+            :on-success="upCoverSuccess"
+            :on-remove="upCoverRemove"
+            :file-list="fileList"
+            list-type="picture">
+            <el-button size="small" type="primary">点击上传</el-button>
+          </el-upload>
         </el-form-item>
         <el-form-item label="亮点" prop="highlights">
-          <el-input v-model="updateMonographInfo.highlights"></el-input>
+          <el-input type="textarea" v-model="updateMonographInfo.highlights"></el-input>
         </el-form-item>
         <el-form-item label="简介" prop="monographAbout">
-          <el-input v-model="updateMonographInfo.monographAbout"></el-input>
+          <el-input type="textarea" v-model="updateMonographInfo.monographAbout"></el-input>
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
@@ -135,13 +170,17 @@
           monographAbout: null,
           author: null
         },
-        updateDialogVisible:false,
-        updateMonographInfo:{
+        updateDialogVisible: false,
+        updateMonographInfo: {
           monographName: null,
           cover: null,
           highlights: null,
-          monographAbout: null
-        }
+          monographAbout: null,
+          author: null
+        },
+        uploadUrl: 'http://localhost:8081/MonographController/upload',
+        accept: 'image/jpg,image/jpeg,image/png',
+        fileList: []
       }
     },
     methods: {
@@ -173,6 +212,10 @@
           return this.$message.error(res.meta.msg);
         }
         this.updateMonographInfo = Object.assign(this.updateMonographInfo, res.data.monograph);
+        this.fileList=[{
+          name: 'cover',
+          url: this.updateMonographInfo.cover
+        }];
         this.updateDialogVisible = true;
       },
       update: async function () {
@@ -202,11 +245,13 @@
         this.$message.success(res.meta.msg)
         this.findAll()
       },
-      showChapterByMonographId: async function(monograph){
-          this.$router.push({ name: 'MonographChapters',params: {monograph:monograph}});
+      showChapterByMonographId: async function(row){
+        sessionStorage.setItem('monograph', JSON.stringify(row))
+        this.$router.push({ name: 'PreviewMonograph'});
       },
       direOper: async function(row){
-        this.$router.push({ name: 'DireMent',params: {monograph:row}});
+        sessionStorage.setItem('monograph', JSON.stringify(row))
+        this.$router.push({ name: 'MonogrphChapterManage'});
       },
       updateStatus: async function (monographId) {
         const result = await this.$confirm('完成之后将不能再修改, 是否继续?', '提示', {
@@ -229,6 +274,18 @@
         this.$message.success(res.meta.msg)
         this.findAll()
       },
+      addCoverSuccess : async function(res){
+        this.appendMonographInfo.cover=res.data.url;
+      },
+      addCoverRemove: async function(){
+        this.appendMonographInfo.cover=null;
+      },
+      upCoverSuccess : async function(res){
+        this.updateMonographInfo.cover=res.data.url;
+      },
+      upCoverRemove: async function(){
+        this.updateMonographInfo.cover=null;
+      },
       sizeChange: async function (newSize) {
         this.pages.pageSize = newSize
         this.findAll()
@@ -242,6 +299,7 @@
         this.findAll()
       },
       dialogClose: function (formRef) {
+        this.$refs.upload.clearFiles()
         this.$refs[formRef].resetFields()
       }
     },

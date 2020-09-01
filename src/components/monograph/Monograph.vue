@@ -43,10 +43,10 @@
         <el-table-column prop="numberOfPurchasers" label="购买人数"></el-table-column>
         <el-table-column label="状态">
           <template slot-scope="scope">
-            <el-tag type="success" v-if="scope.row.offShelf == 0">未上架</el-tag>
-            <el-tag type="warning" v-else-if="scope.row.offShelf == 1">已上架</el-tag>
-            <el-tag type="danger" v-else-if="scope.row.offShelf == 2">已下架</el-tag>
-            <el-tag type="danger" v-else-if="scope.row.offShelf == 4">未完成</el-tag>
+            <el-tag type="primary" v-if="scope.row.offShelf == 1">未上架</el-tag>
+            <el-tag type="success" v-else-if="scope.row.offShelf == 2">已上架</el-tag>
+            <el-tag type="danger" v-else-if="scope.row.offShelf == 3">已下架</el-tag>
+            <el-tag type="warning" v-else-if="scope.row.offShelf == 0">未完成</el-tag>
           </template>
         </el-table-column>
         <el-table-column label="优惠价格">
@@ -94,7 +94,7 @@
       </el-form>
       <span slot="footer" class="dialog-footer">
           <el-button @click="updatePriceVisible = false">取消</el-button>
-          <el-button type="primary" @click="update()">确定</el-button>
+          <el-button type="primary" @click="updatePrice()">确定</el-button>
       </span>
     </el-dialog>
 
@@ -146,7 +146,7 @@
         this.updatePriceInfo = Object.assign(this.updatePriceInfo, res.data.monograph);
         this.updatePriceVisible = true;
       },
-      update: async function () {
+      updatePrice: async function () {
         const { data: res } = await this.$http.put('MonographController/update', this.updatePriceInfo)
         if (!res.meta.access) {
           return this.$message.error(res.meta.msg)
