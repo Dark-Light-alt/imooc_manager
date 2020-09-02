@@ -31,7 +31,15 @@
         </el-table-column>
         <el-table-column type="index" label="#"></el-table-column>
         <el-table-column prop="monographName" label="专刊标题" :show-overflow-tooltip="true"></el-table-column>
-        <el-table-column prop="cover" label="封面"></el-table-column>
+        <el-table-column prop="cover" label="封面">
+          <template slot-scope="scope">
+            <el-image
+              style="border-radius: 5px"
+              :src="scope.row.cover"
+              fit="scale-down">
+            </el-image>
+          </template>
+        </el-table-column>
         <el-table-column prop="employeeInfo.employeeName" label="作者"></el-table-column>
         <el-table-column prop="createTime" label="创建时间"></el-table-column>
         <el-table-column label="状态">
