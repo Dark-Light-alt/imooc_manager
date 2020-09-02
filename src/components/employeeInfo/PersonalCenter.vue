@@ -5,7 +5,7 @@
       <el-breadcrumb-item>个人中心</el-breadcrumb-item>
     </el-breadcrumb>
     <el-card>
-        <el-form label-position="right" label-width="100px" :model="employeeInfo" ref="updateForm">
+        <el-form label-position="right" label-width="100px" :model="employeeInfo">
           <el-form-item label="头像 :" style="margin-left: 300px">
             <el-avatar :size="100" :src="employeeInfo.photo"></el-avatar>
           </el-form-item>
@@ -60,25 +60,11 @@
     name: "PersonalCenter",
     data() {
       return {
-        employeeInfo: [],
+        employeeInfo: {},
         updateDialogVisible: false,
         uploadUrl: 'http://localhost:8081/EmployeeInfoController/upload',
         fileList: [],
-        accept: 'image/jpg,image/jpeg,image/png',
-        updateEmployeeInfo: {
-          employeeName: null,
-          employeeSex: null,
-
-          employeePhone: null,
-          // 邮箱地址
-          employeeEmail: null,
-          // 身份证号
-          employeeIdcard: null,
-          // 现居住地
-          employeeAddress: null,
-          // 头像
-          photo: null
-        }
+        accept: 'image/jpg,image/jpeg,image/png'
       }
     },
     created: function () {
