@@ -41,7 +41,7 @@
           </template>
         </el-table-column>
         <el-table-column prop="employeeInfo.employeeName" label="作者"></el-table-column>
-        <el-table-column prop="createTime" label="创建时间"></el-table-column>
+        <el-table-column prop="price" label="价格"></el-table-column>
         <el-table-column label="状态">
           <template slot-scope="scope">
             <el-tag type="primary" v-if="scope.row.offShelf == 1">未上架</el-tag>
