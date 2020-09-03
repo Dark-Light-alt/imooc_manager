@@ -26,10 +26,8 @@
         <el-table-column prop="createTime" label="资料名称"></el-table-column>
         <el-table-column label="操作">
           <template slot-scope="scope">
-            <el-button size="mini" icon="el-icon-edit" type="primary"
-                       @click="showUpdateDialog(scope.row.chapterId)"></el-button>
             <el-button size="mini" icon="el-icon-delete" type="danger"
-                       @click="removeChapterAndVideo(scope.row.chapterId)"></el-button>
+                       @click="remove(scope.row.dataId)"></el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -64,7 +62,6 @@
           <el-button type="primary" @click="appendDatas">确定</el-button>
       </span>
     </el-dialog>
-
   </div>
 </template>
 
@@ -88,12 +85,6 @@
         uploadUrl: 'http://localhost:8081/DatasController/upload',
         appendDialogVisible: false,
         appendDatasInfo: {
-          dataId: null,
-          dataName: null,
-          dataUrl: null,
-          courseId: null
-        },
-        updateDatasInfo: {
           dataId: null,
           dataName: null,
           dataUrl: null,
@@ -123,6 +114,14 @@
         this.$message.success(res.meta.msg)
         this.findAllByCourseId()
         this.appendDialogVisible = false
+      },
+      remove: async function (dataId) {
+        const { data: res } = await this.$http.delete(`DatasController/remove/${dataId}`)
+        if (!res.meta.access) {
+          return this.$message.error(res.meta.msg)
+        }
+        this.$message.success(res.meta.msg)
+        this.findAllByCourseId()
       },
       datasSuccess: function (res, file, fileList) {
         this.appendDatasInfo.dataUrl = res.data.url
