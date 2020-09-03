@@ -23,16 +23,18 @@
       <el-card>
         简介：{{monographInfo.monographAbout}}
       </el-card>
-      <div>
+      <div v-if="monographInfo.chapterList !== 0">
         <el-card v-for="chapter in monographInfo.chapterList" :key="chapter.chapterId">
           <h4>{{chapter.chapterName}}</h4>
           <p>{{chapter.chapterAbout}}</p>
-          <div class="videoList">
-            <a class="video" v-for="article in chapter.articleList" :key="article.articleId" @click="openArticle(article.articleId)">
-              <i class="el-icon-document"></i>
-              {{article.articleName}}
-              <el-tag type="warning" v-if="article.tryReading==1" size="mini">试读文章</el-tag>
-            </a>
+          <div class="videoList" v-if="chapter.articleList.length !== 0">
+            <div v-for="article in chapter.articleList" :key="article.articleId">
+              <a class="video" v-if="article.articleId != null" @click="openArticle(article.articleId)">
+                  <i class="el-icon-document"></i>
+                  {{article.articleName}}
+                  <el-tag type="warning" v-if="article.tryReading==1" size="mini">试读文章</el-tag>
+              </a>
+            </div>
           </div>
         </el-card>
       </div>
