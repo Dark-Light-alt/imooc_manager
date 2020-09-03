@@ -3,15 +3,6 @@
     <el-card class="header"
              :style="{backgroundImage:'linear-gradient(to right, rgba(0,0,0,.8), rgba(0,0,0,.4)),url(' + course.cover + ')'}"
              style="background-size:cover; color: white;">
-      <p class="header-oriented">
-        <span>课程</span>
-        <span>\</span>
-        <span v-if="course.direction.directionName">{{course.direction.directionName}}</span>
-        <span>\</span>
-        <span>{{course.type.typeName}}</span>
-        <span>\</span>
-        <span>{{course.courseName}}</span>
-      </p>
       <h2>{{course.courseName}}</h2>
       <div class="header-main">
         <div class="photo">
@@ -125,6 +116,13 @@
           }
         }
 
+        if (totalSec < 60) {
+          if (totalSec < 10) {
+            return '00: 0' + totalSec
+          }
+          return '00: ' + totalSec
+        }
+
         let totalMin = Math.floor(totalSec / 60)
         if (totalMin < 60) {
           return totalMin + '分'
@@ -145,14 +143,6 @@
 
 <style lang="less" scoped>
   .header {
-    .header-oriented {
-      color: rgb(133, 133, 131);
-
-      span {
-        padding-right: 5px;
-      }
-    }
-
     h2 {
       margin-top: 35px;
     }
