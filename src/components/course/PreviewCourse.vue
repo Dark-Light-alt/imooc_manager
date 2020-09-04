@@ -14,10 +14,6 @@
           <span class="name">{{course.employeeInfo.employeeName}}</span>
           <span>{{course.employeeInfo.position.positionName}}</span>
         </div>
-        <div class="personageInfo" v-if="course.customer != null">
-          <span class="name">{{course.customer.customerReal.actualName}}</span>
-          <span>{{course.customer.customerPosition.positionName}}</span>
-        </div>
         <div class="courseInfo">
           <span>难度</span>
           <span v-if="course.courseLevel === 0">入门</span>

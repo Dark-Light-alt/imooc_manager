@@ -94,6 +94,12 @@
         <el-form-item label="课程简介" prop="courseAbout">
           <el-input type="textarea" :rows="6" v-model="appendCourseInfo.courseAbout"></el-input>
         </el-form-item>
+        <el-form-item label="是否付费" prop="isfree">
+          <el-radio-group v-model="appendCourseInfo.isfree">
+            <el-radio :label="0">免费</el-radio>
+            <el-radio :label="1">付费</el-radio>
+          </el-radio-group>
+        </el-form-item>
         <el-form-item label="课程封面" prop="cover">
           <el-upload
             class="upload-demo"
@@ -137,6 +143,12 @@
         </el-form-item>
         <el-form-item label="课程简介" prop="courseAbout">
           <el-input type="textarea" :rows="6" v-model="updateCourseInfo.courseAbout"></el-input>
+        </el-form-item>
+        <el-form-item label="是否付费" prop="isfree">
+          <el-radio-group v-model="updateCourseInfo.isfree">
+            <el-radio :label="0">免费</el-radio>
+            <el-radio :label="1">付费</el-radio>
+          </el-radio-group>
         </el-form-item>
         <el-form-item label="课程封面" prop="cover">
           <el-upload
@@ -201,7 +213,7 @@
           author: null,
           typeId: null,
           duration: 0,
-          isfree: 1,
+          isfree: 0,
           courseLevel: 0
         },
         updateDialogVisible: false,
