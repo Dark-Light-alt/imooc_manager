@@ -104,7 +104,7 @@
               <template slot-scope="scope">
                 <el-form label-position="left">
                   <el-form-item label="作者">
-                    <span>{{ scope.row.customer.customerReal.actualName}}</span>
+                    <span>{{ scope.row.employeeInfo.employeeName}}</span>
                   </el-form-item>
                   <el-form-item label="课程方向">
                     <span>{{ scope.row.direction.directionName}}</span>
@@ -217,7 +217,10 @@
         }
       },
       payForCourseManage: async function () {
-        const { data: res } = await this.$http.post('CourseController/payForCourseManage', this.pages)
+        const { data: res } = await this.$http.post('CourseController/courseManage', {
+          pages: this.pages,
+          isfree: 1
+        })
         if (!res.meta.access) {
           return this.$message.error(res.meta.msg)
         }
@@ -225,7 +228,10 @@
         this.pages = res.pages
       },
       freeForCourseManage: async function () {
-        const { data: res } = await this.$http.post('CourseController/freeForCourseManage', this.pages)
+        const { data: res } = await this.$http.post('CourseController/courseManage', {
+          pages: this.pages,
+          isfree: 0
+        })
         if (!res.meta.access) {
           return this.$message.error(res.meta.msg)
         }

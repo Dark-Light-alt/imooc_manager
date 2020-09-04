@@ -131,6 +131,9 @@
         this.findAll()
         this.appendDialogVisible = false
       },
+      remove: async function () {
+
+      },
       uploadSuccess: function (res, file, fileList) {
         this.carousel.cover = res.data.url
       },
