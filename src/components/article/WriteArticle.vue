@@ -22,10 +22,9 @@
           <v-md-editor v-model="articleContent" height="500px"></v-md-editor>
         </el-form-item>
       </el-form>
+
+      <el-button type="primary" @click="insertArticle">完成</el-button>
     </el-card>
-    <span slot="footer">
-          <el-button type="primary" @click="insertArticle">完成</el-button>
-    </span>
   </div>
 
 </template>
@@ -33,16 +32,17 @@
 <script>
   export default {
     name: 'WriteArticle',
-    data: function(){
+    data: function () {
       return {
-        appendArticleInfo:{
-          articleName:'',
-          tryReading:0,
-          chapterId:this.$route.query.chapterId
+        appendArticleInfo: {
+          articleName: '',
+          tryReading: 0,
+          chapterId: this.$route.query.chapterId
         },
-        articleContent:''
+        articleContent: ''
       }
-    },methods:{
+    },
+    methods: {
       insertArticle: async function () {
         const { data: res } = await this.$http.post('ArticleController/insertArticle', {
           article: this.appendArticleInfo,
@@ -52,20 +52,10 @@
           return this.$message.error(res.meta.msg)
         }
         this.$message.success(res.meta.msg)
-        this.articleContent='';
+        this.articleContent = ''
         //添加成功返回Article页面
-        this.$router.push({name:"Article"});
-      },
-      save: async function(){
-        window.localStorage.setItem("content",JSON.stringify(this.articleContent));
+        this.$router.push({ name: 'Article' })
       }
-    },
-    created: function(){
-      window.addEventListener('beforeunload',this.save);
-      this.articleContent = JSON.parse(window.localStorage.getItem("content"));
-    },
-    destroyed: function(){
-      window.removeEventListener('beforeunload',this.save())
     }
   }
 </script>
