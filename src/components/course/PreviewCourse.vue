@@ -39,6 +39,7 @@
               <i class="el-icon-video-play"></i>
               {{video.videoName}}
               {{showTime(video.duration)}}
+              <span class="flag" v-if="video.videoIsenable == 1">已被禁用</span>
             </a>
           </div>
         </el-card>
@@ -189,6 +190,18 @@
       border-radius: 5px;
       padding-right: 10px;
       padding-left: 10px;
+
+      .flag {
+        float: right;
+        background-color: rgb(242, 13, 13);
+        color: white;
+        margin-top: 10px;
+        height: 30px;
+        line-height: 30px;
+        padding-left: 10px;
+        padding-right: 10px;
+        border-radius: 3px;
+      }
     }
 
     a:hover {
