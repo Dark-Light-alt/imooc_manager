@@ -53,7 +53,7 @@
         <el-table-column label="操作" width="300">
           <template slot-scope="scope">
             <el-button type="warning" size="mini" @click="showChapterByMonographId(scope.row)">预览</el-button>
-            <el-button type="success" size="mini" @click="showDialog(scope.row.monographId)"
+            <el-button type="success" size="mini" @click="putAway(scope.row.monographId)"
                        v-if="scope.row.offShelf==1">上架</el-button>
             <el-button type="danger" size="mini" @click="soldOut(scope.row.monographId)"
                        v-if="scope.row.offShelf==2">下架</el-button>
@@ -66,21 +66,6 @@
                      :total="pages.total" layout="total,sizes,prev,pager,next,jumper">
       </el-pagination>
     </el-card>
-
-    <el-dialog title="上架" :visible.sync="updatePriceVisible" width="50%"
-               @close="dialogClose('updateForm')" :close-on-click-modal="false">
-      <el-form label-position="right" label-width="100px" :model="updateMonographInfo" ref="updateForm">
-        <el-form-item label="价格" prop="price">
-          <el-input v-model="updateMonographInfo.price"></el-input>
-        </el-form-item>
-      </el-form>
-      <span slot="footer" class="dialog-footer">
-          <el-button @click="updatePriceVisible = false">取消</el-button>
-          <el-button type="primary" @click="updatePrice()">确定</el-button>
-      </span>
-    </el-dialog>
-
-
   </div>
 </template>
 
@@ -100,9 +85,7 @@
           flag: true
         },
         monographList: [],
-        chapters: [],
-        updatePriceVisible: false,
-        updateMonographInfo:{}
+        chapters: []
       }
     },
     methods: {
@@ -122,19 +105,16 @@
         sessionStorage.setItem('monograph', JSON.stringify(row))
         this.$router.push({ name: 'PreviewMonograph'});
       },
-      showDialog: async function(monographId){
-        this.updateMonographInfo.monographId = monographId;
-        this.updatePriceVisible = true;
-      },
-      updatePrice: async function () {
+      putAway: async function (monographId) {
         //上架
-        this.updateMonographInfo.offShelf = 2;
-        const {data: res } = await this.$http.put("MonographController/putAway",this.updateMonographInfo)
+        const {data: res } = await this.$http.post("MonographController/updateOffShelf",{
+          monographId: monographId,
+          offShelf: 2
+        })
         if(!res.meta.access){
           return this.$message.error(res.meta.msg)
         }
         this.$message.success(res.meta.msg)
-        this.updatePriceVisible = false;
         this.findAll()
       },
       soldOut: async function (monographId) {

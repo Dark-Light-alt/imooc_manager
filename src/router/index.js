@@ -25,11 +25,6 @@ const routes = [
         component: () => import('../components/accountNumber/AccountNumber')
       },
       {
-        path: '/monograph',
-        name: 'Monograph',
-        component: () => import('../components/monograph/Monograph')
-      },
-      {
         path: '/allMonograph',
         name: 'AllMonograph',
         component: () => import('../components/monograph/AllMonograph')
