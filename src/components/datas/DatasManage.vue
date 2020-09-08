@@ -116,6 +116,15 @@
         this.appendDialogVisible = false
       },
       remove: async function (dataId) {
+        const result = await this.$confirm('是否删除此课程资料, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).catch(err => err)
+
+        if (result !== 'confirm') {
+          return
+        }
         const { data: res } = await this.$http.delete(`DatasController/remove/${dataId}`)
         if (!res.meta.access) {
           return this.$message.error(res.meta.msg)
@@ -142,6 +151,7 @@
         this.findAllByCourseId()
       },
       dialogClose: function (formRef) {
+        this.$refs.upload.clearFiles()
         this.$refs[formRef].resetFields()
       }
     },

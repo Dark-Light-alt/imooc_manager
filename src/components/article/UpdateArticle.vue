@@ -16,12 +16,9 @@
           <v-md-editor v-model="articleContent" height="500px"></v-md-editor>
         </el-form-item>
       </el-form>
+      <el-button type="primary" @click="updateArticle">完成</el-button>
     </el-card>
-    <span slot="footer">
-          <el-button type="primary" @click="updateArticle">完成</el-button>
-    </span>
   </div>
-
 </template>
 
 <script>
@@ -50,12 +47,12 @@
         }
         this.$message.success(res.meta.msg)
         //添加成功返回Article页面
-        this.$router.push({ name: "Article" });
+        this.$router.push({ name: 'Article' })
       }
     },
     created: function () {
-      this.updateArticleInfo = Object.assign(this.updateArticleInfo, JSON.parse(sessionStorage.getItem("article")));
-      this.articleContent = this.$route.query.fileContent;
+      this.updateArticleInfo = Object.assign(this.updateArticleInfo, JSON.parse(sessionStorage.getItem('article')))
+      this.articleContent = this.$route.query.fileContent
     }
   }
 </script>

@@ -144,6 +144,16 @@ const routes = [
         path: '/previewMonograph',
         name: 'PreviewMonograph',
         component: () => import('../components/monograph/PreviewMonograph')
+      },
+      {
+        path: '/reportReason',
+        name: 'ReportReason',
+        component: () => import('../components/reportReason/ReportReason')
+      },
+      {
+        path: '/reportReview',
+        name: 'ReportReview',
+        component: () => import('../components/reportReview/ReportReview')
       }
     ]
   }
