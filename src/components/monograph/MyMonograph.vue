@@ -99,14 +99,10 @@
           </el-upload>
         </el-form-item>
         <el-form-item label="亮点" prop="highlights">
-          <el-input type="textarea" v-model="appendMonographInfo.highlights"></el-input>
-          <!--<span v-if="appendMonographInfo.highlights.length<=750" style="color: rgb(220,220,220);">还可以输入{{750-appendMonographInfo.highlights.length}}个字符</span>
-          <span v-if="appendMonographInfo.highlights.length>750" style="color: red;">已超出{{appendMonographInfo.highlights.length-750}}个字符</span>
-        -->
+          <el-input type="textarea" v-model="appendMonographInfo.highlights" :rows="3" maxlength="200" show-word-limit></el-input>
         </el-form-item>
         <el-form-item label="简介" prop="monographAbout">
-          <el-input type="textarea" v-model="appendMonographInfo.monographAbout"></el-input>
-          <!--<span>还可以输入个{{750-appendMonographInfo.monographAbout.length}}字符</span>-->
+          <el-input type="textarea" v-model="appendMonographInfo.monographAbout" :rows="5" maxlength="300" show-word-limit></el-input>
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
@@ -136,10 +132,10 @@
           </el-upload>
         </el-form-item>
         <el-form-item label="亮点" prop="highlights">
-          <el-input type="textarea" v-model="updateMonographInfo.highlights"></el-input>
+          <el-input type="textarea" v-model="updateMonographInfo.highlights" :rows="3" maxlength="200" show-word-limit></el-input>
         </el-form-item>
         <el-form-item label="简介" prop="monographAbout">
-          <el-input type="textarea" v-model="updateMonographInfo.monographAbout"></el-input>
+          <el-input type="textarea" v-model="updateMonographInfo.monographAbout" :rows="5" maxlength="300" show-word-limit></el-input>
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">

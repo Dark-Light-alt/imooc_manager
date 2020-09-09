@@ -41,7 +41,6 @@
           </template>
         </el-table-column>
         <el-table-column prop="employeeInfo.employeeName" label="作者"></el-table-column>
-        <el-table-column prop="price" label="价格"></el-table-column>
         <el-table-column label="状态">
           <template slot-scope="scope">
             <el-tag type="primary" v-if="scope.row.offShelf == 1">未上架</el-tag>
@@ -54,7 +53,7 @@
           <template slot-scope="scope">
             <el-button type="warning" size="mini" @click="showChapterByMonographId(scope.row)">预览</el-button>
             <el-button type="success" size="mini" @click="putAway(scope.row.monographId)"
-                       v-if="scope.row.offShelf==1">上架</el-button>
+                       v-if="scope.row.offShelf!=2">上架</el-button>
             <el-button type="danger" size="mini" @click="soldOut(scope.row.monographId)"
                        v-if="scope.row.offShelf==2">下架</el-button>
           </template>
@@ -106,6 +105,15 @@
         this.$router.push({ name: 'PreviewMonograph'});
       },
       putAway: async function (monographId) {
+        const result = await this.$confirm('是否上架此专刊, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).catch(err => err)
+
+        if (result !== 'confirm') {
+          return
+        }
         //上架
         const {data: res } = await this.$http.post("MonographController/updateOffShelf",{
           monographId: monographId,
@@ -119,7 +127,7 @@
       },
       soldOut: async function (monographId) {
         //下架
-        const result = await this.$confirm('是否下架此商品, 是否继续?', '提示', {
+        const result = await this.$confirm('是否下架此专刊, 是否继续?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
