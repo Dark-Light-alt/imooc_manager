@@ -30,6 +30,7 @@ import {
   Radio,
   RadioGroup,
   Row,
+  Scrollbar,
   Select,
   Submenu,
   Switch,
@@ -85,3 +86,4 @@ Vue.use(Image)
 Vue.use(Tabs)
 Vue.use(TabPane)
 Vue.use(InputNumber)
+Vue.use(Scrollbar)

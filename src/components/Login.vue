@@ -65,7 +65,7 @@
             }
             sessionStorage.setItem('employeeInfo', JSON.stringify(res.data.employeeInfo))
             this.$message.success(res.meta.msg)
-            this.$router.push({ name: 'Home' })
+            this.$router.push({ name: 'Index' })
           }
         })
       }

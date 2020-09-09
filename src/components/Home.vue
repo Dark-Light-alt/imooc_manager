@@ -2,23 +2,32 @@
   <div class="home">
     <el-container>
       <el-aside :width="aside_width">
-        <el-menu router v-for="menu in menus" :key="menu.rightsId" background-color="#304156" text-color="#BFCBD9"
-                 :collapse="collapses" :default-active="active" @select="select">
-          <el-menu-item :index="menu.rightsId" v-if="menu.children === undefined" :route="{name: menu.rightsPath}">
-            <i :class="menu.icon"></i>
-            <span>{{menu.rightsName}}</span>
-          </el-menu-item>
-          <el-submenu :index="menu.rightsId" v-if="menu.children !== undefined">
-            <template slot="title">
+        <el-scrollbar :native="false">
+          <el-menu router background-color="#304156" text-color="#BFCBD9" :collapse="collapses"
+                   :default-active="active">
+            <el-menu-item index="home" :route="{name: 'Index'}">
+              <i class="el-icon-s-home"></i>
+              <span>首页</span>
+            </el-menu-item>
+          </el-menu>
+          <el-menu router v-for="menu in menus" :key="menu.rightsId" background-color="#304156" text-color="#BFCBD9"
+                   :collapse="collapses" :default-active="active" @select="select">
+            <el-menu-item :index="menu.rightsId" v-if="menu.children === undefined" :route="{name: menu.rightsPath}">
               <i :class="menu.icon"></i>
               <span>{{menu.rightsName}}</span>
-            </template>
-            <el-menu-item :index="children.rightsId" v-for="children in menu.children" :key="children.rightsId"
-                          :route="{name: children.rightsPath}">
-              <span>{{children.rightsName}}</span>
             </el-menu-item>
-          </el-submenu>
-        </el-menu>
+            <el-submenu :index="menu.rightsId" v-if="menu.children !== undefined">
+              <template slot="title">
+                <i :class="menu.icon"></i>
+                <span>{{menu.rightsName}}</span>
+              </template>
+              <el-menu-item :index="children.rightsId" v-for="children in menu.children" :key="children.rightsId"
+                            :route="{name: children.rightsPath}">
+                <span>{{children.rightsName}}</span>
+              </el-menu-item>
+            </el-submenu>
+          </el-menu>
+        </el-scrollbar>
       </el-aside>
       <el-container>
         <el-header height="50px">
@@ -54,7 +63,7 @@
     name: 'Home.vue',
     data: function () {
       return {
-        active: '',
+        active: 'home',
         collapses: false,
         aside_width: '210px',
         collapse_icon: 'el-icon-s-fold',
@@ -109,7 +118,7 @@
   }
 </script>
 
-<style scoped>
+<style>
   .home, .el-container {
     height: 100%;
   }
@@ -171,5 +180,13 @@
     vertical-align: center;
     border-radius: 10px;
     margin-right: 15px;
+  }
+
+  .el-scrollbar {
+    height: 100%;
+  }
+
+  .el-scrollbar__wrap {
+    overflow-x: hidden;
   }
 </style>

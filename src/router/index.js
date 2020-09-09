@@ -15,6 +15,11 @@ const routes = [
     component: () => import('../components/Home'),
     children: [
       {
+        path: '/index',
+        name: 'Index',
+        component: () => import('../components/Index')
+      },
+      {
         path: '/employeeInfo',
         name: 'EmployeeInfo',
         component: () => import('../components/employeeInfo/EmployeeInfo')
@@ -159,6 +164,16 @@ const routes = [
         path: '/reportReview',
         name: 'ReportReview',
         component: () => import('../components/reportReview/ReportReview')
+      },
+      {
+        path: '/order',
+        name: 'Order',
+        component: () => import('../components/order/Order')
+      },
+      {
+        path: '/customer',
+        name: 'Customer',
+        component: () => import('../components/customer/Customer')
       }
     ]
   }

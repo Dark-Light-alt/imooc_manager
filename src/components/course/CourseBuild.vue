@@ -270,6 +270,9 @@
         this.typeList = res.data.typeList
       },
       appendCourse: async function () {
+        // 用于视频上传是否试看栏的显示与隐藏
+        sessionStorage.setItem('courseIsfree', this.appendCourseInfo.isfree)
+
         const author = JSON.parse(sessionStorage.getItem('employeeInfo')).employeeId
         this.appendCourseInfo.author = author
         const { data: res } = await this.$http.put('CourseController/append', this.appendCourseInfo)
