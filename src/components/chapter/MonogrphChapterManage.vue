@@ -62,7 +62,7 @@
           <el-input v-model="appendChapterInfo.chapterName"></el-input>
         </el-form-item>
         <el-form-item label="章节简介" prop="chapterAbout">
-          <el-input type="textarea" v-model="appendChapterInfo.chapterAbout"></el-input>
+          <el-input type="textarea" v-model="appendChapterInfo.chapterAbout" :rows="3" maxlength="100" show-word-limit></el-input>
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
@@ -78,7 +78,7 @@
           <el-input v-model="updateChapterInfo.chapterName"></el-input>
         </el-form-item>
         <el-form-item label="章节简介" prop="chapterAbout">
-          <el-input type="textarea" v-model="updateChapterInfo.chapterAbout"></el-input>
+          <el-input type="textarea" v-model="updateChapterInfo.chapterAbout" :rows="3" maxlength="100" show-word-limit></el-input>
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">

@@ -99,10 +99,10 @@
           </el-upload>
         </el-form-item>
         <el-form-item label="亮点" prop="highlights">
-          <el-input type="textarea" v-model="appendMonographInfo.highlights"></el-input>
+          <el-input type="textarea" v-model="appendMonographInfo.highlights" :rows="3" maxlength="200" show-word-limit></el-input>
         </el-form-item>
         <el-form-item label="简介" prop="monographAbout">
-          <el-input type="textarea" v-model="appendMonographInfo.monographAbout"></el-input>
+          <el-input type="textarea" v-model="appendMonographInfo.monographAbout" :rows="5" maxlength="300" show-word-limit></el-input>
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
@@ -132,10 +132,10 @@
           </el-upload>
         </el-form-item>
         <el-form-item label="亮点" prop="highlights">
-          <el-input type="textarea" v-model="updateMonographInfo.highlights"></el-input>
+          <el-input type="textarea" v-model="updateMonographInfo.highlights" :rows="3" maxlength="200" show-word-limit></el-input>
         </el-form-item>
         <el-form-item label="简介" prop="monographAbout">
-          <el-input type="textarea" v-model="updateMonographInfo.monographAbout"></el-input>
+          <el-input type="textarea" v-model="updateMonographInfo.monographAbout" :rows="5" maxlength="300" show-word-limit></el-input>
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
@@ -166,16 +166,16 @@
         appendMonographInfo: {
           monographName: null,
           cover: null,
-          highlights: null,
-          monographAbout: null,
+          highlights: '',
+          monographAbout: '',
           author: null
         },
         updateDialogVisible: false,
         updateMonographInfo: {
           monographName: null,
           cover: null,
-          highlights: null,
-          monographAbout: null,
+          highlights: '',
+          monographAbout: '',
           author: null
         },
         uploadUrl: 'http://localhost:8081/MonographController/upload',

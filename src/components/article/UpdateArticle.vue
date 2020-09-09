@@ -12,12 +12,6 @@
         <el-form-item label="标题" prop="articleName">
           <el-input v-model="updateArticleInfo.articleName"></el-input>
         </el-form-item>
-        <el-form-item label="是否试读" prop="tryReading">
-          <el-radio-group v-model="updateArticleInfo.tryReading">
-            <el-radio :label="0">否</el-radio>
-            <el-radio :label="1">是</el-radio>
-          </el-radio-group>
-        </el-form-item>
         <el-form-item>
           <v-md-editor v-model="articleContent" height="500px"></v-md-editor>
         </el-form-item>
